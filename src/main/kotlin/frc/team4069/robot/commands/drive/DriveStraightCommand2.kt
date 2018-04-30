@@ -5,8 +5,9 @@ import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.saturn.lib.pid.PID
 import frc.team4069.saturn.lib.pid.PIDConstants
 
-class DriveStraightCommand2(val target: Double) : Command() {
-    private val pid = PID(PIDConstants(1.0, 0.0, 0.1, 0.5), target = target)
+class DriveStraightCommand2(target: Double) : Command() {
+    //TODO: Check and tune
+    private val pid = PID(PIDConstants(1.0, 0.0, 0.1, 0.0), target = target)
 
     init {
         requires(DriveBaseSubsystem)
