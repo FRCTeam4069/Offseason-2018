@@ -16,7 +16,7 @@ class OperatorDriveCommand : Command() {
 
     override fun execute() {
 
-        val turning = OI.steeringAxis
+        val turning = OI.driveLeft
         val speed = OI.driveSpeed
 
         DriveBaseSubsystem.drive(turning, speed)

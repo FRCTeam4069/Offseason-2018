@@ -50,12 +50,12 @@ object DriveBaseSubsystem : Subsystem() {
     }
 
     fun drive(turn: Double, speed: Double) {
-        // TODO: play around with curvature vs arcade in here
-        if(speed == 0.0) {
-            drive.curvatureDrive(speed, turn, true)
-        }else {
-            drive.curvatureDrive(speed, turn, false)
-        }
+//        if(speed == 0.0) {
+//            drive.curvatureDrive(speed, turn, true)
+//        }else {
+//            drive.curvatureDrive(speed, turn, false)
+//        }
+        drive.tankDrive(turn, speed)
     }
 
     val distanceTraveledMetres: Double
@@ -67,8 +67,4 @@ object DriveBaseSubsystem : Subsystem() {
 
             return average * METRES_PER_ROTATION
         }
-
-    private fun speedPolynomial(speed: Double) = Math.sqrt(speed) * 2
-
-    data class WheelSpeeds(val left: Double, val right: Double)
 }

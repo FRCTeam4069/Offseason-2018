@@ -1,39 +1,27 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
-import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.subsystems.IntakeSubsystem
-import frc.team4069.saturn.lib.command
-import frc.team4069.saturn.lib.hid.ButtonType
-import frc.team4069.saturn.lib.hid.Controller
+import edu.wpi.first.wpilibj.Joystick
 
 object OI {
-    private val driveJoystick = Controller(0)
-    private val controlJoystick = Controller(1)
+    private val driveJoystick = Joystick(0)
+    private val controlJoystick = Joystick(1)
 
-    init {
+//    init {
         // Slow outtake command
-        controlJoystick.button(ButtonType.BUMPER_RIGHT)
-                .whenPressed(SetIntakeSpeedCommand(-0.5))
-                .whenReleased(command(IntakeSubsystem::stop))
-    }
+//        controlJoystick.button(ButtonType.BUMPER_RIGHT)
+//                .whenPressed(SetIntakeSpeedCommand(-0.5))
+//                .whenReleased(command(IntakeSubsystem::stop))
+//    }
 
-    val steeringAxis: Double
+    val driveLeft: Double
         get() {
-            val axis = driveJoystick.getX(GenericHID.Hand.kLeft)
-            return if(Math.abs(axis) in 0.0..0.2) {
-                0.0
-            }else {
-                axis
-            }
+            return -driveJoystick.getRawAxis(1)
         }
 
     val driveSpeed: Double
         get() {
-            val forward = driveJoystick.getRawAxis(3)
-            val backward = driveJoystick.getRawAxis(2)
-
-            return forward - backward
+            return -controlJoystick.getRawAxis(1)
         }
 
     val elevatorAxis: Double
