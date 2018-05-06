@@ -50,12 +50,11 @@ object DriveBaseSubsystem : Subsystem() {
     }
 
     fun drive(turn: Double, speed: Double) {
-//        if(speed == 0.0) {
-//            drive.curvatureDrive(speed, turn, true)
-//        }else {
-//            drive.curvatureDrive(speed, turn, false)
-//        }
-        drive.tankDrive(turn, speed)
+        if(speed == 0.0) {
+            drive.curvatureDrive(speed, turn, true)
+        }else {
+            drive.curvatureDrive(speed, turn, false)
+        }
     }
 
     val distanceTraveledMetres: Double
