@@ -13,7 +13,6 @@ class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command(
         ElevatorSubsystem.set(pos)
     }
 
-
     override val isFinished: Boolean
         get() = Math.abs(Math.abs(ElevatorSubsystem.position) - Math.abs(pos.ticks)) <= 200
 }
