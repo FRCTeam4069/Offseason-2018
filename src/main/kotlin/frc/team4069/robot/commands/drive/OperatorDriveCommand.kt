@@ -16,7 +16,7 @@ class OperatorDriveCommand : Command() {
 
     override fun periodic() {
 
-        val turning = OI.steeringAxis
+        val turning = OI.turningAxis
         val speed = OI.driveSpeed
 
         DriveBaseSubsystem.drive(turning, speed)

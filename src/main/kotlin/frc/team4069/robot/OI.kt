@@ -37,10 +37,10 @@ object OI {
                 .whenReleased(command(ArmSubsystem::stop))
     }
 
-    val steeringAxis: Double
+    val turningAxis: Double
         get() {
             val axis = driveJoystick.getX(GenericHID.Hand.kLeft)
-            return if(Math.abs(axis) in 0.0..0.2) {
+            return if(axis in 0.0..0.2) {
                 0.0
             }else {
                 axis
@@ -49,8 +49,8 @@ object OI {
 
     val driveSpeed: Double
         get() {
-            val forward = driveJoystick.getRawAxis(3)
-            val backward = driveJoystick.getRawAxis(2)
+            val forward = driveJoystick.getTriggerAxis(GenericHID.Hand.kRight)
+            val backward = driveJoystick.getTriggerAxis(GenericHID.Hand.kLeft)
 
             return forward - backward
         }

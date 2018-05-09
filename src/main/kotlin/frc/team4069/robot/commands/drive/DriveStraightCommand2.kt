@@ -6,7 +6,8 @@ import frc.team4069.saturn.lib.pid.PID
 import frc.team4069.saturn.lib.pid.PIDConstants
 
 class DriveStraightCommand2(val target: Double) : Command() {
-    private val pid = PID(PIDConstants(1.0, 0.0, 0.1, 0.5), target = target)
+    //TODO: Check and tune
+    private val pid = PID(PIDConstants(1.0, 0.0, 0.1, 0.0), target = target)
     private var lastDistance = Double.NaN
 
     init {
