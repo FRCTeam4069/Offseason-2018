@@ -1,26 +1,21 @@
 package frc.team4069.robot
 
 import frc.team4069.robot.commands.OperatorControlCommandGroup
-import frc.team4069.robot.commands.drive.DriveStraightCommand1
 import frc.team4069.saturn.lib.SaturnRobot
+import frc.team4069.saturn.lib.command.Scheduler
 
 class Robot : SaturnRobot() {
 
-    override fun autonomousInit() {
-        scheduler.add(DriveStraightCommand1(2.0))
-    }
-
     override fun teleopInit() {
-        scheduler.removeAll()
-        scheduler.add(OperatorControlCommandGroup())
+        Scheduler.clear()
+        Scheduler.add(OperatorControlCommandGroup())
     }
 
     override fun autonomousPeriodic() {
-        scheduler.run()
+        Scheduler.run()
     }
 
     override fun teleopPeriodic() {
-        scheduler.run()
+        Scheduler.run()
     }
 }
-

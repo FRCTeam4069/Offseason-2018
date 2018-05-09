@@ -1,19 +1,20 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import edu.wpi.first.wpilibj.command.Subsystem
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
+import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 import frc.team4069.saturn.lib.util.LowPassFilter
 
-//TODO: Test driving differences of arcade and curvature
 object DriveBaseSubsystem : Subsystem() {
     private val leftDrive = SaturnSRX(12, filter = LowPassFilter(50), slaveIds = *intArrayOf(11, 13))
     private val leftEncoder = SaturnEncoder(256, 0, 1)
 
     private val rightDrive = SaturnSRX(19, filter = LowPassFilter(50), slaveIds = *intArrayOf(18, 20))
     private val rightEncoder = SaturnEncoder(256, 8, 9)
+
+    override val defaultCommand = OperatorDriveCommand()
 
     private const val METRES_PER_ROTATION = 0.61
 
@@ -33,10 +34,6 @@ object DriveBaseSubsystem : Subsystem() {
             setReverseDirection(true)
             samplesToAverage = 7
         }
-    }
-
-    override fun initDefaultCommand() {
-        defaultCommand = OperatorDriveCommand()
     }
 
     fun stop() {

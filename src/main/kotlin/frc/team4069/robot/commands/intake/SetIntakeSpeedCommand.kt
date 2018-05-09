@@ -1,11 +1,17 @@
 package frc.team4069.robot.commands.intake
 
-import edu.wpi.first.wpilibj.command.InstantCommand
 import frc.team4069.robot.subsystems.IntakeSubsystem
+import frc.team4069.saturn.lib.command.Command
 
-class SetIntakeSpeedCommand(val speed: Double) : InstantCommand() {
+class SetIntakeSpeedCommand(val speed: Double) : Command() {
 
-    override fun initialize() {
+    init {
+        requires(IntakeSubsystem)
+    }
+
+    override fun onCreate() {
         IntakeSubsystem.set(speed)
     }
+
+    override val isFinished = true
 }

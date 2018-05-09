@@ -1,9 +1,13 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
+import frc.team4069.robot.commands.drive.DriveCommand
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
+import frc.team4069.robot.subsystems.DriveBaseSubsystem
+import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.robot.subsystems.IntakeSubsystem
-import frc.team4069.saturn.lib.command
+import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.hid.ButtonType
 import frc.team4069.saturn.lib.hid.Controller
 
@@ -15,7 +19,34 @@ object OI {
         // Slow outtake command
         controlJoystick.button(ButtonType.BUMPER_RIGHT)
                 .whenPressed(SetIntakeSpeedCommand(-0.5))
-                .whenReleased(command(IntakeSubsystem::stop))
+                .whenReleased(object : Command() {
+                    init {
+                        requires(IntakeSubsystem)
+                    }
+
+                    override fun onCreate() {
+                        IntakeSubsystem.stop()
+                    }
+
+                    override val isFinished = true
+                })
+
+        controlJoystick.button(ButtonType.Y)
+                .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.HALFWAY))
+
+        driveJoystick.button(ButtonType.BUMPER_RIGHT)
+                .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
+                .whenReleased(object : Command() {
+                    init {
+                        requires(DriveBaseSubsystem)
+                    }
+
+                    override fun onCreate() {
+                        DriveBaseSubsystem.stop()
+                    }
+
+                    override val isFinished = true
+                })
     }
 
     val steeringAxis: Double

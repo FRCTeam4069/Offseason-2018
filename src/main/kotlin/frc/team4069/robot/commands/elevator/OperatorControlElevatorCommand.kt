@@ -1,9 +1,9 @@
 package frc.team4069.robot.commands.elevator
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.OI
 import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.saturn.lib.command.Command
 
 class OperatorControlElevatorCommand : Command() {
 
@@ -13,7 +13,7 @@ class OperatorControlElevatorCommand : Command() {
         requires(ElevatorSubsystem)
     }
 
-    override fun execute() {
+    override fun periodic() {
         val elevatorAxis = OI.elevatorAxis * 0.8
 
         if(elevatorAxis != 0.0) {
@@ -27,5 +27,5 @@ class OperatorControlElevatorCommand : Command() {
         }
     }
 
-    override fun isFinished(): Boolean = false
+    override val isFinished: Boolean = false
 }
