@@ -10,8 +10,8 @@ class OperatorControlIntakeCommand : Command() {
     }
 
     override fun periodic() {
-        val axis = OI.intakeAxis
-        IntakeSubsystem.set(axis)
+        val speed = OI.intakeSpeedAxis
+        IntakeSubsystem.set(speed)
     }
 
     override val isFinished = false

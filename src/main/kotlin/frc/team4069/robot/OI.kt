@@ -13,6 +13,7 @@ import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.command
 import frc.team4069.saturn.lib.hid.ButtonType
 import frc.team4069.saturn.lib.hid.Controller
+import kotlin.math.abs
 
 object OI {
     private val driveJoystick = Controller(0)
@@ -58,18 +59,22 @@ object OI {
     val elevatorAxis: Double
         get() {
             val axis = controlJoystick.getY(GenericHID.Hand.kRight)
-            return if(Math.abs(axis) in 0.0..0.2) {
+            return if(abs(axis) in 0.0..0.2) {
                 0.0
             }else {
                 axis
             }
         }
 
-    val intakeAxis: Double
+    val intakeSpeedAxis: Double
         get() {
             val forward = controlJoystick.getRawAxis(3)
             val backward = controlJoystick.getRawAxis(2)
 
             return forward - backward
         }
+
+    val intakeLeftReversed: Boolean
+        get() = controlJoystick.button(ButtonType.BACK) //TODO: Add push down on joysticks to SS and change to that
+                .value
 }
