@@ -35,6 +35,10 @@ object ElevatorSubsystem : Subsystem() {
         get() = talon.getSelectedSensorPosition(0)
 
     enum class Position(val ticks: Int) {
-        HALFWAY(-3000)
+        MINIMUM(0),
+        EXCHANGE(-3000),
+        INTAKE(-5500),
+        SWITCH(-15000),
+        SCALE(MAX_POSITION_TICKS + 100)
     }
 }

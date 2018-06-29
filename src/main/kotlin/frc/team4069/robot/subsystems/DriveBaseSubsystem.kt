@@ -1,6 +1,5 @@
 package frc.team4069.robot.subsystems
 
-import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.saturn.lib.command.Subsystem

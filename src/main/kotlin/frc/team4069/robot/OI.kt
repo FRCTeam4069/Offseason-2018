@@ -25,7 +25,7 @@ object OI {
                 .whenReleased(command(IntakeSubsystem::stop))
 
         controlJoystick.button(ButtonType.Y)
-                .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.HALFWAY))
+                .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
 
         driveJoystick.button(ButtonType.BUMPER_RIGHT)
                 .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
