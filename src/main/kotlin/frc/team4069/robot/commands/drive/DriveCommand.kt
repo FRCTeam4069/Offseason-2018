@@ -1,21 +1,23 @@
 package frc.team4069.robot.commands.drive
 
-import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
-import frc.team4069.saturn.lib.command.InstantCommand
+import frc.team4069.robot.subsystems.DriveBaseSubsystem
+import frc.team4069.saturn.lib.command.Command
 
-class DriveCommand(private val dir: Direction) : InstantCommand() {
+class DriveCommand(val dir: Direction) : Command() {
 
     init {
-        requires(driveBase)
+        requires(DriveBaseSubsystem)
     }
 
     override fun onCreate() {
         if(dir == Direction.FORWARDS) {
-            driveBase.drive(0.0, 0.7)
+            DriveBaseSubsystem.drive(0.0, 0.7)
         }else {
-            driveBase.drive(0.0, -0.7)
+            DriveBaseSubsystem.drive(0.0, -0.7)
         }
     }
+
+    override val isFinished = true
 
     enum class Direction {
         FORWARDS,

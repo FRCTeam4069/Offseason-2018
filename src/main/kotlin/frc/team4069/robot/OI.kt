@@ -6,7 +6,6 @@ import frc.team4069.robot.commands.arm.StartArmCommand
 import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.commands.intake.ToggleIntakeCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -14,7 +13,6 @@ import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.command
 import frc.team4069.saturn.lib.hid.ButtonType
 import frc.team4069.saturn.lib.hid.Controller
-import kotlin.math.abs
 
 object OI {
     private val driveJoystick = Controller(0)
@@ -28,9 +26,6 @@ object OI {
 
         controlJoystick.button(ButtonType.Y)
                 .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
-
-        controlJoystick.button(ButtonType.A)
-                .whenPressed(ToggleIntakeCommand())
 
         driveJoystick.button(ButtonType.BUMPER_RIGHT)
                 .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
@@ -63,22 +58,18 @@ object OI {
     val elevatorAxis: Double
         get() {
             val axis = controlJoystick.getY(GenericHID.Hand.kRight)
-            return if(abs(axis) in 0.0..0.2) {
+            return if(Math.abs(axis) in 0.0..0.2) {
                 0.0
             }else {
                 axis
             }
         }
 
-    val intakeSpeedAxis: Double
+    val intakeAxis: Double
         get() {
             val forward = controlJoystick.getRawAxis(3)
             val backward = controlJoystick.getRawAxis(2)
 
             return forward - backward
         }
-
-    val intakeLeftReversed: Boolean
-        get() = controlJoystick.button(ButtonType.RIGHT_STICK)
-                .value
 }
