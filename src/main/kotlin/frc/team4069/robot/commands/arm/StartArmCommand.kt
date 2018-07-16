@@ -1,16 +1,14 @@
 package frc.team4069.robot.commands.arm
 
-import frc.team4069.robot.subsystems.ArmSubsystem
-import frc.team4069.saturn.lib.command.Command
+import frc.team4069.saturn.lib.command.InstantCommand
+import frc.team4069.robot.subsystems.ArmSubsystem as arm
 
-class StartArmCommand(val reversed: Boolean = false) : Command() {
+class StartArmCommand(private val reversed: Boolean = false) : InstantCommand() {
     init {
-        requires(ArmSubsystem)
+        requires(arm)
     }
 
     override fun onCreate() {
-        ArmSubsystem.start(reversed)
+        arm.start(reversed)
     }
-
-    override val isFinished = true
 }
