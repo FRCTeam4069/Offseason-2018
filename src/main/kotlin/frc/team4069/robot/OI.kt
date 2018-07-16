@@ -6,6 +6,7 @@ import frc.team4069.robot.commands.arm.StartArmCommand
 import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
+import frc.team4069.robot.commands.intake.ToggleIntakeCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -27,6 +28,9 @@ object OI {
 
         controlJoystick.button(ButtonType.Y)
                 .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
+
+        controlJoystick.button(ButtonType.A)
+                .whenPressed(ToggleIntakeCommand())
 
         driveJoystick.button(ButtonType.BUMPER_RIGHT)
                 .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
@@ -75,6 +79,6 @@ object OI {
         }
 
     val intakeLeftReversed: Boolean
-        get() = controlJoystick.button(ButtonType.BACK) //TODO: Add push down on joysticks to SS and change to that
+        get() = controlJoystick.button(ButtonType.RIGHT_STICK)
                 .value
 }

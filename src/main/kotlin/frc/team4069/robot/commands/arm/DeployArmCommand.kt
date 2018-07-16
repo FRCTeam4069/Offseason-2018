@@ -1,17 +1,15 @@
 package frc.team4069.robot.commands.arm
 
-import frc.team4069.robot.subsystems.ArmSubsystem
-import frc.team4069.saturn.lib.command.Command
+import frc.team4069.saturn.lib.command.InstantCommand
+import frc.team4069.robot.subsystems.ArmSubsystem as arm
 
-class DeployArmCommand : Command() {
+class DeployArmCommand : InstantCommand() {
 
     init {
-        requires(ArmSubsystem)
+        requires(arm)
     }
 
     override fun onCreate() {
-        ArmSubsystem.position = ArmSubsystem.MAX_POSITION_TICKS - 300.0
+        arm.position = arm.MAX_POSITION_TICKS - 300.0
     }
-
-    override val isFinished = true
 }

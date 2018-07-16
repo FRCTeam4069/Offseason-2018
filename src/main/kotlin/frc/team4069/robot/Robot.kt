@@ -11,11 +11,7 @@ class Robot : SaturnRobot() {
         Scheduler.add(OperatorControlCommandGroup())
     }
 
-    override fun autonomousPeriodic() {
-        Scheduler.run()
-    }
-
-    override fun teleopPeriodic() {
+    override fun robotPeriodic() {
         Scheduler.run()
     }
 }
