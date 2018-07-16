@@ -1,18 +1,18 @@
 package frc.team4069.robot.commands.elevator
 
+import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.saturn.lib.command.Command
-import frc.team4069.robot.subsystems.ElevatorSubsystem as elevator
 
-class SetElevatorPositionCommand(private val pos: elevator.Position) : Command() {
+class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command() {
 
     init {
-        requires(elevator)
+        requires(ElevatorSubsystem)
     }
 
     override fun onCreate() {
-        elevator.set(pos)
+        ElevatorSubsystem.set(pos)
     }
 
     override val isFinished: Boolean
-        get() = Math.abs(Math.abs(elevator.position) - Math.abs(pos.ticks)) <= 200
+        get() = Math.abs(Math.abs(ElevatorSubsystem.position) - Math.abs(pos.ticks)) <= 200
 }
