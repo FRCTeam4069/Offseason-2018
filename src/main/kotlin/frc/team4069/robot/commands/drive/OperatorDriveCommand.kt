@@ -7,20 +7,17 @@ import frc.team4069.saturn.lib.command.Command
 class OperatorDriveCommand : Command() {
 
     init {
-        requires(DriveBaseSubsystem)
+        +DriveBaseSubsystem
     }
 
-    override fun onCreate() {
+    override suspend fun initialize() {
         DriveBaseSubsystem.stop()
     }
 
-    override fun periodic() {
-
+    override suspend fun execute() {
         val turning = OI.turningAxis
         val speed = OI.driveSpeed
 
         DriveBaseSubsystem.drive(turning, speed)
     }
-
-    override val isFinished: Boolean = false
 }

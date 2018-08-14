@@ -6,13 +6,11 @@ import frc.team4069.saturn.lib.command.Command
 
 class OperatorControlIntakeCommand : Command() {
     init {
-        requires(IntakeSubsystem)
+        +IntakeSubsystem
     }
 
-    override fun periodic() {
+    override suspend fun execute() {
         val axis = OI.intakeAxis
         IntakeSubsystem.set(axis)
     }
-
-    override val isFinished = false
 }

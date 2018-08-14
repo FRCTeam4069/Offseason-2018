@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
+import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
@@ -14,7 +15,7 @@ object DriveBaseSubsystem : Subsystem() {
     private val rightEncoder = SaturnEncoder(256, 8, 9)
     private val drive = DifferentialDrive(leftDrive, rightDrive)
 
-    override val defaultCommand = OperatorDriveCommand()
+    override var defaultCommand: Command? = OperatorDriveCommand()
 
     private const val METRES_PER_ROTATION = 0.61
 

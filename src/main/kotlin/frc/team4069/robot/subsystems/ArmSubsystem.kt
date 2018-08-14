@@ -1,13 +1,10 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ArmSubsystem : Subsystem() {
-    override val defaultCommand: Command? = null
-
     private val talon = SaturnSRX(24)
 
     init {

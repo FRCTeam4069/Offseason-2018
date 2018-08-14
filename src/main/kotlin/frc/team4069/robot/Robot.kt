@@ -1,21 +1,30 @@
 package frc.team4069.robot
 
-import frc.team4069.robot.commands.OperatorControlCommandGroup
+import frc.team4069.robot.commands.drive.OperatorDriveCommand
+import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
+import frc.team4069.robot.commands.intake.OperatorControlIntakeCommand
+import frc.team4069.robot.subsystems.ArmSubsystem
+import frc.team4069.robot.subsystems.DriveBaseSubsystem
+import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.SaturnRobot
-import frc.team4069.saturn.lib.command.Scheduler
+import frc.team4069.saturn.lib.command.SubsystemHandler
+import frc.team4069.saturn.lib.command.builders.parallel
 
 class Robot : SaturnRobot() {
 
-    override fun teleopInit() {
-        Scheduler.clear()
-        Scheduler.add(OperatorControlCommandGroup())
+    override suspend fun initialize() {
+        SubsystemHandler += ArmSubsystem
+        SubsystemHandler += DriveBaseSubsystem
+        SubsystemHandler += ElevatorSubsystem
+        SubsystemHandler += IntakeSubsystem
     }
 
-    override fun autonomousPeriodic() {
-        Scheduler.run()
-    }
-
-    override fun teleopPeriodic() {
-        Scheduler.run()
+    override suspend fun teleoperatedInit() {
+        parallel {
+            +OperatorDriveCommand()
+            +OperatorControlElevatorCommand()
+            +OperatorControlIntakeCommand()
+        }.start()
     }
 }

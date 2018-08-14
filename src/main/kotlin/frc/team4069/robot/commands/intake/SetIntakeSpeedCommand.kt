@@ -6,12 +6,14 @@ import frc.team4069.saturn.lib.command.Command
 class SetIntakeSpeedCommand(private val speed: Double) : Command() {
 
     init {
-        requires(IntakeSubsystem)
+        +IntakeSubsystem
     }
 
-    override fun onCreate() {
+    override suspend fun initialize() {
         IntakeSubsystem.set(speed)
     }
 
-    override val isFinished = true
+    override suspend fun dispose() {
+        IntakeSubsystem.stop()
+    }
 }

@@ -6,10 +6,10 @@ import frc.team4069.saturn.lib.command.Command
 class DriveCommand(val dir: Direction) : Command() {
 
     init {
-        requires(DriveBaseSubsystem)
+        +DriveBaseSubsystem
     }
 
-    override fun onCreate() {
+    override suspend fun initialize() {
         if(dir == Direction.FORWARDS) {
             DriveBaseSubsystem.drive(0.0, 0.7)
         }else {
@@ -17,7 +17,9 @@ class DriveCommand(val dir: Direction) : Command() {
         }
     }
 
-    override val isFinished = true
+    override suspend fun dispose() {
+        DriveBaseSubsystem.stop()
+    }
 
     enum class Direction {
         FORWARDS,

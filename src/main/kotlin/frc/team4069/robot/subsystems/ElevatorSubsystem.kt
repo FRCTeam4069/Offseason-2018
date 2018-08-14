@@ -2,11 +2,12 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
+import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ElevatorSubsystem : Subsystem() {
-    override val defaultCommand = OperatorControlElevatorCommand()
+    override var defaultCommand: Command? = OperatorControlElevatorCommand()
     private val talon = SaturnSRX(16, reversed = true, slaveIds = *intArrayOf(15))
 
     private const val MAX_POSITION_TICKS = -29000

@@ -10,10 +10,10 @@ class OperatorControlElevatorCommand : Command() {
     private var set = true
 
     init {
-        requires(ElevatorSubsystem)
+        +ElevatorSubsystem
     }
 
-    override fun periodic() {
+    override suspend fun execute() {
         val elevatorAxis = OI.elevatorAxis * 0.8
 
         if(elevatorAxis != 0.0) {
@@ -26,6 +26,4 @@ class OperatorControlElevatorCommand : Command() {
             }
         }
     }
-
-    override val isFinished: Boolean = false
 }

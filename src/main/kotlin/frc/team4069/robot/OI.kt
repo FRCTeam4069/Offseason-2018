@@ -6,35 +6,48 @@ import frc.team4069.robot.commands.arm.StartArmCommand
 import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.subsystems.ArmSubsystem
-import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
-import frc.team4069.robot.subsystems.IntakeSubsystem
-import frc.team4069.saturn.lib.command
-import frc.team4069.saturn.lib.hid.ButtonType
+import frc.team4069.saturn.lib.hid.ButtonType.*
 import frc.team4069.saturn.lib.hid.Controller
+import frc.team4069.saturn.lib.hid.controller
 
 object OI {
-    private val driveJoystick = Controller(0)
-    private val controlJoystick = Controller(1)
+
+    private val driveJoystick: Controller
+    private val controlJoystick: Controller
 
     init {
-        // Slow outtake command
-        controlJoystick.button(ButtonType.BUMPER_RIGHT)
-                .whenPressed(SetIntakeSpeedCommand(-0.5))
-                .whenReleased(command(IntakeSubsystem::stop))
+        controlJoystick = controller(1) {
+            button(A) {
+                val command = SetIntakeSpeedCommand(-0.5)
+                pressed(command)
+                released { command.stop() }
+            }
 
-        controlJoystick.button(ButtonType.Y)
-                .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
+            button(Y) {
+                pressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
+            }
+        }
 
-        driveJoystick.button(ButtonType.BUMPER_RIGHT)
-                .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
-                .whenReleased(command(DriveBaseSubsystem::stop))
-        driveJoystick.button(ButtonType.Y)
-                .whenPressed(DeployArmCommand())
-        driveJoystick.button(ButtonType.A)
-                .whenPressed(StartArmCommand(true))
-                .whenReleased(command(ArmSubsystem::stop))
+        driveJoystick = controller(0) {
+            button(BUMPER_RIGHT)  {
+                val command = DriveCommand(DriveCommand.Direction.FORWARDS)
+
+                pressed(command)
+                released { command.stop() }
+            }
+
+            button(Y) {
+                pressed(DeployArmCommand())
+            }
+
+            button(A) {
+                val command = StartArmCommand(true)
+
+                pressed(command)
+                released { command.stop() }
+            }
+        }
     }
 
     val turningAxis: Double
