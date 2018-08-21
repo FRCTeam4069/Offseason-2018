@@ -30,10 +30,12 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 //    compile 'com.github.Redrield:SaturnShell:0.0.5-command'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0"
     compile files("libs/saturnshell.jar")
 
     compile wpilib()
     compile ctre()
+    compile pathfinder()
 }
 
 deploy {

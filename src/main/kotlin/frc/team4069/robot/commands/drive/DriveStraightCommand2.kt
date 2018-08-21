@@ -1,5 +1,6 @@
 package frc.team4069.robot.commands.drive
 
+import com.ctre.phoenix.motorcontrol.ControlMode
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.command.condition
@@ -21,6 +22,7 @@ class DriveStraightCommand2(val target: Double) : Command() {
     }
 
     override suspend fun execute() {
-        DriveBaseSubsystem.drive(0.0, pid.update(DriveBaseSubsystem.distanceTraveledMetres))
+        val output = pid.update(DriveBaseSubsystem.distanceTraveledMetres)
+        DriveBaseSubsystem.set(ControlMode.PercentOutput, output, output)
     }
 }

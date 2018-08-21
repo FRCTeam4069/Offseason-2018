@@ -10,7 +10,7 @@ class SetIntakeSpeedCommand(private val speed: Double) : Command() {
     }
 
     override suspend fun initialize() {
-        IntakeSubsystem.set(speed)
+        IntakeSubsystem.set(speed, false)
     }
 
     override suspend fun dispose() {

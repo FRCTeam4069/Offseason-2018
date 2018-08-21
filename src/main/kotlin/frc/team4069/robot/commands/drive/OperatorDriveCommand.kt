@@ -18,6 +18,6 @@ class OperatorDriveCommand : Command() {
         val turning = OI.turningAxis
         val speed = OI.driveSpeed
 
-        DriveBaseSubsystem.drive(turning, speed)
+        DriveBaseSubsystem.curvatureDrive(turning, speed, speed == 0.0)
     }
 }

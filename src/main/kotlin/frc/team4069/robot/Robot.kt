@@ -1,5 +1,7 @@
 package frc.team4069.robot
 
+import edu.wpi.first.wpilibj.ADXRS450_Gyro
+import edu.wpi.first.wpilibj.SPI
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
 import frc.team4069.robot.commands.intake.OperatorControlIntakeCommand
@@ -18,6 +20,12 @@ class Robot : SaturnRobot() {
         SubsystemHandler += DriveBaseSubsystem
         SubsystemHandler += ElevatorSubsystem
         SubsystemHandler += IntakeSubsystem
+        OI
+        Localization
+        stateMachine.onWhile(State.TELEOP) {
+            OI.controlJoystick.update()
+            OI.driveJoystick.update()
+        }
     }
 
     override suspend fun teleoperatedInit() {
@@ -26,5 +34,15 @@ class Robot : SaturnRobot() {
             +OperatorControlElevatorCommand()
             +OperatorControlIntakeCommand()
         }.start()
+    }
+
+//    override suspend fun autonomousInit() {
+//        FollowPathCommand("better-robot-test.csv", true).start()
+//    }
+
+    companion object {
+        val gyro by lazy {
+            ADXRS450_Gyro(SPI.Port.kOnboardCS0)
+        }
     }
 }

@@ -16,6 +16,7 @@ class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command(
     }
 
     override suspend fun initialize() {
+        println("Command initialized")
         ElevatorSubsystem.set(pos)
     }
 }

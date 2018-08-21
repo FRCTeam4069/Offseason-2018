@@ -14,7 +14,7 @@ object ElevatorSubsystem : Subsystem() {
 
     init {
         talon.apply {
-            invertSensorPhase = false
+            invertSensorPhase = true
 
             p = 0.5
             d = 0.1
