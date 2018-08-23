@@ -13,15 +13,17 @@ object OI {
 
     val driveJoystick = xboxController(0) {
         button(kA) {
-            pressed(DriveCommand(DriveCommand.Direction.FORWARDS))
+            val cmd = DriveCommand(DriveCommand.Direction.FORWARDS)
+            changeOn(cmd)
+            changeOff { cmd.stop() }
         }
     }
 
     val controlJoystick = xboxController(1) {}
 
-    init {
-
-    }
+//    init {
+//
+//    }
 
     val turningAxis: Double
         get() {

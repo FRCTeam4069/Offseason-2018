@@ -9,8 +9,8 @@ import kotlin.math.sin
 object Localization {
     private val lock = Any()
 
-    private var prevL = 0
-    private var prevR = 0
+    private var prevL = 0.0
+    private var prevR = 0.0
     private var prevA = 0.0
 
     var position = Pose2d(0.0, 0.0, 0.0)
@@ -24,16 +24,16 @@ object Localization {
     fun reset(resetPose: Pose2d = Pose2d(0.0, 0.0, 0.0)) {
         synchronized(lock) {
             position = resetPose
-            prevL = DriveBaseSubsystem.leftEncoder.get()
-            prevR = DriveBaseSubsystem.rightEncoder.get()
+            prevL = DriveBaseSubsystem.leftPosition.ft
+            prevR = DriveBaseSubsystem.rightPosition.ft
         }
     }
 
     private fun run() {
         synchronized(lock) {
 
-            val currentL = DriveBaseSubsystem.leftEncoder.get()
-            val currentR = DriveBaseSubsystem.rightEncoder.get()
+            val currentL = DriveBaseSubsystem.leftPosition.ft
+            val currentR = DriveBaseSubsystem.rightPosition.ft
             val heading = Math.toRadians(-Robot.gyro.angle)
 
             val deltaL = currentL - prevL

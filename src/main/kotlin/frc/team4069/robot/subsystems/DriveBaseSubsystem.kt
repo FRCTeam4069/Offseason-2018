@@ -2,6 +2,7 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
+import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.saturn.lib.command.Command
 import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
@@ -13,11 +14,11 @@ import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object DriveBaseSubsystem : Subsystem() {
-    val leftDrive = SaturnSRX(12, slaveIds = *intArrayOf(11, 13))
-    val leftEncoder = SaturnEncoder(256, 0, 1)
+    private val leftDrive = SaturnSRX(12, slaveIds = *intArrayOf(11, 13))
+    private val leftEncoder = SaturnEncoder(256, 0, 1)
 
-    val rightDrive = SaturnSRX(19, slaveIds = *intArrayOf(18, 20))
-    val rightEncoder = SaturnEncoder(256, 8, 9)
+    private val rightDrive = SaturnSRX(19, slaveIds = *intArrayOf(18, 20))
+    private val rightEncoder = SaturnEncoder(256, 8, 9)
 
 
     val leftPosition: DistanceUnit
@@ -35,30 +36,18 @@ object DriveBaseSubsystem : Subsystem() {
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha
 
-    override var defaultCommand: Command? = null
+    override var defaultCommand: Command? = OperatorDriveCommand()
 
     private const val METRES_PER_ROTATION = 0.61
 
     private var stopAccumulator = 0.0
 
     init {
-        leftEncoder.apply {
-            setMaxPeriod(0.1)
-            setMinRate(10.0)
-            distancePerPulse = 1.0
-            setReverseDirection(true)
-            samplesToAverage = 7
-        }
-
+        leftEncoder.distancePerPulse = 0.0075421
         rightEncoder.apply {
-            setMaxPeriod(0.1)
-            setMinRate(10.0)
-            distancePerPulse = 1.0
+            distancePerPulse = 0.0075421
             setReverseDirection(true)
-            samplesToAverage = 7
         }
-
-
     }
 
     fun stop() {
@@ -130,14 +119,4 @@ object DriveBaseSubsystem : Subsystem() {
         leftDrive.set(mode, left)
         rightDrive.set(mode, right)
     }
-
-    val distanceTraveledMetres: Double
-        get() {
-            val leftWheelRotations = Math.abs(leftEncoder.distanceTraveledRotations)
-            val rightWheelRotations = Math.abs(rightEncoder.distanceTraveledRotations)
-
-            val average = (leftWheelRotations + rightWheelRotations) / 2
-
-            return average * METRES_PER_ROTATION
-        }
 }

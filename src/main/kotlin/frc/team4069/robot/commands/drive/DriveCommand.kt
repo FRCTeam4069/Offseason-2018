@@ -11,9 +11,10 @@ class DriveCommand(val dir: Direction) : Command() {
     }
 
     override suspend fun initialize() {
-        if(dir == Direction.FORWARDS) {
+        println("Initializing command")
+        if (dir == Direction.FORWARDS) {
             DriveBaseSubsystem.set(ControlMode.PercentOutput, 0.25, 0.25)
-        }else {
+        } else {
             DriveBaseSubsystem.set(ControlMode.PercentOutput, -0.7, -0.7)
         }
     }
