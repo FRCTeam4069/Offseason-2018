@@ -1,7 +1,7 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import frc.team4069.saturn.lib.command.Subsystem
+import edu.wpi.first.wpilibj.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ArmSubsystem : Subsystem() {
@@ -30,6 +30,9 @@ object ArmSubsystem : Subsystem() {
     fun reset() {
         stop()
         talon.setSelectedSensorPosition(0, 0, 0)
+    }
+
+    override fun initDefaultCommand() {
     }
 
     const val MAX_POSITION_TICKS = 2700

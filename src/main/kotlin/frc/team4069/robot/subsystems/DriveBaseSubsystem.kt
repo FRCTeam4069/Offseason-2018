@@ -1,10 +1,9 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
+import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
-import frc.team4069.saturn.lib.command.Command
-import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.distance.NativeUnits
 import frc.team4069.saturn.lib.math.uom.distance.preferences
@@ -18,7 +17,7 @@ object DriveBaseSubsystem : Subsystem() {
     private val leftEncoder = SaturnEncoder(256, 0, 1)
 
     private val rightDrive = SaturnSRX(19, slaveIds = *intArrayOf(18, 20))
-    private val rightEncoder = SaturnEncoder(256, 8, 9)
+    private val rightEncoder = SaturnEncoder(256, 8, 9, true)
 
 
     val leftPosition: DistanceUnit
@@ -36,7 +35,11 @@ object DriveBaseSubsystem : Subsystem() {
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha
 
-    override var defaultCommand: Command? = OperatorDriveCommand()
+//    override var defaultCommand: Command? = OperatorDriveCommand()
+
+    override fun initDefaultCommand() {
+        defaultCommand = OperatorDriveCommand()
+    }
 
     private const val METRES_PER_ROTATION = 0.61
 
@@ -44,10 +47,7 @@ object DriveBaseSubsystem : Subsystem() {
 
     init {
         leftEncoder.distancePerPulse = 0.0075421
-        rightEncoder.apply {
-            distancePerPulse = 0.0075421
-            setReverseDirection(true)
-        }
+        rightEncoder.distancePerPulse = 0.0075421
     }
 
     fun stop() {
