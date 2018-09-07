@@ -12,8 +12,8 @@ import jaci.pathfinder.Trajectory
 import java.io.File
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
-    private val follower = RamsyeetPathFollower(path, 0.8, 0.75)
+class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
+    private val follower = RamsyeetPathFollower(path, 0.7, 0.65)
 
     private var lastVelocity = 0.0 to 0.0
     val dt = path[0].dt
@@ -21,7 +21,7 @@ class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
     private val lController = VelocityPIDFController(
             p = 0.2,
 //            i = 0.0,
-//            d = 0.05,
+            d = 0.001,
             v = 0.07143,
             a = 0.0,
             s = 0.1,
@@ -31,7 +31,7 @@ class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
     private val rController = VelocityPIDFController(
             p = 0.2,
 //            i = 0.0,
-//            d = 0.05,
+            d = 0.001,
             v = 0.07143,
             a = 0.0,
             s = 0.1,
@@ -69,7 +69,7 @@ class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
         val leftOut = lController.getPIDFOutput(left to (left - lastVelocity.first) / dt)
         val rightOut = rController.getPIDFOutput(right to (right - lastVelocity.second) / dt)
 
-        println("PID out left: $leftOut. PID out right: $rightOut")
+//        println("PID out left: $leftOut. PID out right: $rightOut")
 
         driveBase.set(ControlMode.PercentOutput,
                 leftOut,
@@ -79,6 +79,7 @@ class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
 
     override fun end() {
         driveBase.stop()
+        println("Ending pose is ${Localization.position}")
     }
 
     override fun isFinished(): Boolean {

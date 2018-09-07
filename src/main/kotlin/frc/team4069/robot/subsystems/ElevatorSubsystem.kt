@@ -43,7 +43,7 @@ object ElevatorSubsystem : Subsystem() {
         MINIMUM(0),
         EXCHANGE(-3000),
         INTAKE(-5500),
-        SWITCH(-15000),
+        SWITCH(-8000),
         SCALE(MAX_POSITION_TICKS + 100)
     }
 }
