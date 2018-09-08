@@ -2,6 +2,7 @@ package frc.team4069.robot.commands.drive
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
+import frc.team4069.robot.Constants
 import frc.team4069.robot.Localization
 import frc.team4069.saturn.lib.math.Pose2d
 import frc.team4069.saturn.lib.math.RamsyeetPathFollower
@@ -19,22 +20,18 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
     val dt = path[0].dt
 
     private val lController = VelocityPIDFController(
-            p = 0.2,
-//            i = 0.0,
-            d = 0.001,
-            v = 0.07143,
-            a = 0.0,
-            s = 0.1,
+            p = Constants.DRIVETRAIN_P,
+            d = Constants.DRIVETRAIN_D,
+            v = Constants.DRIVETRAIN_V,
+            s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.leftVelocity.fps }
     )
 
     private val rController = VelocityPIDFController(
-            p = 0.2,
-//            i = 0.0,
-            d = 0.001,
-            v = 0.07143,
-            a = 0.0,
-            s = 0.1,
+            p = Constants.DRIVETRAIN_P,
+            d = Constants.DRIVETRAIN_D,
+            v = Constants.DRIVETRAIN_V,
+            s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.rightVelocity.fps }
     )
 
@@ -63,7 +60,7 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
         val currentPose = Localization.position
 
         val twist = follower.update(currentPose)
-        val output = twist.inverseKinematics(1.791.ft)
+        val output = twist.inverseKinematics(Constants.DRIVETRAIN_WIDTH_FT.ft)
         val (left, right) = output
 
         val leftOut = lController.getPIDFOutput(left to (left - lastVelocity.first) / dt)
