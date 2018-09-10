@@ -52,7 +52,7 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
     }
 
     override fun initialize() {
-        driveBase.reset()
+        driveBase.stop()
     }
 
     override fun execute() {

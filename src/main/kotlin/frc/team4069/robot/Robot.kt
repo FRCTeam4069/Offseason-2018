@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.IterativeRobot
 import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
 import frc.team4069.robot.commands.AutoCommandGroup
+import frc.team4069.robot.commands.OperatorControlCommandGroup
 
 //class Robot : SaturnRobot(true) {
 class Robot : IterativeRobot() {
@@ -21,6 +22,7 @@ class Robot : IterativeRobot() {
 
     override fun robotInit() {
         Localization
+        NTConnection
     }
 
     override fun robotPeriodic() {
@@ -30,6 +32,10 @@ class Robot : IterativeRobot() {
     override fun autonomousInit() {
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
         Scheduler.getInstance().add(AutoCommandGroup())
+    }
+
+    override fun teleopInit() {
+        Scheduler.getInstance().add(OperatorControlCommandGroup())
     }
 
     companion object {
