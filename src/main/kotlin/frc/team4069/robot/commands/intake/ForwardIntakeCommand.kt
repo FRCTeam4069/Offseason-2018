@@ -13,22 +13,24 @@ class ForwardIntakeCommand(forwardThreshold: DistanceUnit = 6.ft) : Command() {
 
     var checkY = false
     private val threshold: Double
+    val initPose = Localization.position
+
+    lateinit var finalDist: Double
 
     init {
         requires(intake)
         requires(driveBase)
 
-        val pose = Localization.position
 
         checkY = when {
-            sin(pose.theta) > 0.5 -> true
+            sin(initPose.theta) > 0.5 -> true
             else -> false
         }
 
         threshold = if(checkY) {
-            pose.y + forwardThreshold.ft
+            initPose.y + forwardThreshold.ft
         }else {
-            pose.x + forwardThreshold.ft
+            initPose.x + forwardThreshold.ft
         }
 
     }
@@ -36,6 +38,15 @@ class ForwardIntakeCommand(forwardThreshold: DistanceUnit = 6.ft) : Command() {
     override fun initialize() {
         driveBase.set(ControlMode.PercentOutput, 0.3, 0.3)
         intake.set(1.0, false)
+    }
+
+    override fun end() {
+        val pose = Localization.position
+        finalDist = if(checkY) {
+            pose.y - initPose.y
+        }else {
+            pose.x - initPose.x
+        }
     }
 
     override fun isFinished(): Boolean {

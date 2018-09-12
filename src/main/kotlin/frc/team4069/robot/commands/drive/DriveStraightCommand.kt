@@ -14,9 +14,11 @@ import kotlin.math.sign
 import kotlin.math.sin
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class DriveStraightCommand(val relativeDistance: DistanceUnit, val baseVelocity: VelocityUnit = 3.fps) : Command() {
+class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVelocity: VelocityUnit = 3.fps) : Command() {
 
     lateinit var initPose: Pose2d
+
+    val dist = relativeDistance()
 
     val leftPid = VelocityPIDFController(
 //            p = Constants.DRIVETRAIN_P,
@@ -34,7 +36,7 @@ class DriveStraightCommand(val relativeDistance: DistanceUnit, val baseVelocity:
             currentVelocity = { driveBase.rightVelocity.fps }
     )
 
-    private val velocity = baseVelocity.fps * sign(relativeDistance.ft)
+    private val velocity = baseVelocity.fps * sign(dist.ft)
 
     init {
         requires(driveBase)
@@ -62,10 +64,10 @@ class DriveStraightCommand(val relativeDistance: DistanceUnit, val baseVelocity:
 
     override fun isFinished(): Boolean {
         val pose = Localization.position
-        return if(checkY) {
-            abs(pose.y) >= abs(relativeDistance.ft)
-        }else {
-            abs(pose.x) >= abs(relativeDistance.ft)
+        return if (checkY) {
+            abs(pose.y) >= abs(dist.ft)
+        } else {
+            abs(pose.x) >= abs(dist.ft)
         }
     }
 
