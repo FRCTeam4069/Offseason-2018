@@ -13,15 +13,15 @@ import jaci.pathfinder.Trajectory
 import java.io.File
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
-    private val follower = RamsyeetPathFollower(path, 0.7, 0.65)
+class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
+    private val follower = RamsyeetPathFollower(path, 0.5, 0.9)
 
     private var lastVelocity = 0.0 to 0.0
     val dt = path[0].dt
 
     private val lController = VelocityPIDFController(
             p = Constants.DRIVETRAIN_P,
-            d = Constants.DRIVETRAIN_D,
+//            d = Constants.DRIVETRAIN_D,
             v = Constants.DRIVETRAIN_V,
             s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.leftVelocity.fps }
@@ -29,7 +29,7 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
 
     private val rController = VelocityPIDFController(
             p = Constants.DRIVETRAIN_P,
-            d = Constants.DRIVETRAIN_D,
+//            d = Constants.DRIVETRAIN_D,
             v = Constants.DRIVETRAIN_V,
             s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.rightVelocity.fps }
@@ -44,11 +44,7 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
             println("Pos: ${Localization.position}")
         }
 
-        // 1 second / dt (ms) = freq (hz)
-//        updateFrequency = (1 / dt).toInt()
-
         println("Path is ${path.length()} segments long")
-//        finishCondition += condition { segmentIdx >= path.length() - 1 }
     }
 
     override fun initialize() {
@@ -56,17 +52,17 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
     }
 
     override fun execute() {
-
         val currentPose = Localization.position
 
         val twist = follower.update(currentPose)
-        val output = twist.inverseKinematics(Constants.DRIVETRAIN_WIDTH_FT.ft)
-        val (left, right) = output
+        val (left, right) = twist.inverseKinematics(Constants.DRIVETRAIN_WIDTH_FT.ft)
 
         val leftOut = lController.getPIDFOutput(left to (left - lastVelocity.first) / dt)
         val rightOut = rController.getPIDFOutput(right to (right - lastVelocity.second) / dt)
-
+//
 //        println("PID out left: $leftOut. PID out right: $rightOut")
+
+        updateDashboard()
 
         driveBase.set(ControlMode.PercentOutput,
                 leftOut,
@@ -84,4 +80,24 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
     }
 
     constructor(csvName: String, zeroPose: Boolean) : this(Pathfinder.readFromCSV(File("/home/lvuser/paths/$csvName")), zeroPose)
+
+    private fun updateDashboard() {
+        val seg = follower.getCurrentSegment()
+        if(seg != null) {
+            pathX = seg.x
+            pathY = seg.y
+            pathHdg = seg.heading
+        }
+    }
+
+    companion object {
+        var pathX = 0.0
+            private set
+
+        var pathY = 0.0
+            private set
+
+        var pathHdg = 0.0
+            private set
+    }
 }

@@ -4,8 +4,9 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.IterativeRobot
 import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
-import frc.team4069.robot.commands.AutoCommandGroup
 import frc.team4069.robot.commands.OperatorControlCommandGroup
+import frc.team4069.robot.commands.drive.FollowPathCommand
+import frc.team4069.robot.subsystems.DriveBaseSubsystem
 
 //class Robot : SaturnRobot(true) {
 class Robot : IterativeRobot() {
@@ -23,6 +24,9 @@ class Robot : IterativeRobot() {
     override fun robotInit() {
         Localization
         NTConnection
+        NetworkInterface
+
+        DriveBaseSubsystem.reset()
     }
 
     override fun robotPeriodic() {
@@ -30,8 +34,8 @@ class Robot : IterativeRobot() {
     }
 
     override fun autonomousInit() {
-//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
-        Scheduler.getInstance().add(AutoCommandGroup())
+        Scheduler.getInstance().add(FollowPathCommand("switch-right-new.csv", true))//.start()
+//        Scheduler.getInstance().add(AutoCommandGroup())
     }
 
     override fun teleopInit() {

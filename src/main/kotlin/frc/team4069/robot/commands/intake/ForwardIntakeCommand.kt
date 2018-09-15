@@ -2,61 +2,51 @@ package frc.team4069.robot.commands.intake
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
-import frc.team4069.robot.Localization
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.distance.ft
-import kotlin.math.sin
+import kotlin.math.abs
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 import frc.team4069.robot.subsystems.IntakeSubsystem as intake
 
-class ForwardIntakeCommand(forwardThreshold: DistanceUnit = 6.ft) : Command() {
+class ForwardIntakeCommand(val forwardThreshold: DistanceUnit = 6.ft) : Command() {
 
-    var checkY = false
-    private val threshold: Double
-    val initPose = Localization.position
 
-    lateinit var finalDist: Double
+    var init: Double = Double.NaN
+    var threshold: Double = Double.NaN
+
+    var finalDist: Double = Double.NaN
 
     init {
         requires(intake)
         requires(driveBase)
 
-
-        checkY = when {
-            sin(initPose.theta) > 0.5 -> true
-            else -> false
-        }
-
-        threshold = if(checkY) {
-            initPose.y + forwardThreshold.ft
-        }else {
-            initPose.x + forwardThreshold.ft
-        }
-
     }
 
     override fun initialize() {
+
+        init = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        threshold = init + forwardThreshold.ft
+
         driveBase.set(ControlMode.PercentOutput, 0.3, 0.3)
         intake.set(1.0, false)
     }
 
     override fun end() {
-        val pose = Localization.position
-        finalDist = if(checkY) {
-            pose.y - initPose.y
-        }else {
-            pose.x - initPose.x
-        }
+        driveBase.stop()
+        val pos = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        println("init is $init. pos is $pos")
+        finalDist = pos - init
     }
 
     override fun isFinished(): Boolean {
-        val pose = Localization.position
-        var outCondition = intake.outputCurrent >= 20.0
+        val pose = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        val absPos = abs(pose - init)
+
+        return intake.outputCurrent >= 30.0 || absPos >= abs(forwardThreshold.ft)
 //        outCondition = if(checkY) {
 //            outCondition || pose.y >= threshold
 //        }else {
 //            outCondition || pose.x >= threshold
 //        }
-        return outCondition
     }
 }

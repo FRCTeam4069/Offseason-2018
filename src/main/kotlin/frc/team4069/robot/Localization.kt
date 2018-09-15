@@ -14,6 +14,7 @@ object Localization {
     private var prevA = 0.0
 
     var position = Pose2d(0.0, 0.0, 0.0)
+        @Synchronized get
         private set
 
     init {

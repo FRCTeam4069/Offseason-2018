@@ -4,21 +4,19 @@ import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.Constants
 import frc.team4069.robot.Localization
-import frc.team4069.saturn.lib.math.Pose2d
 import frc.team4069.saturn.lib.math.VelocityPIDFController
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
 import frc.team4069.saturn.lib.math.uom.velocity.fps
 import kotlin.math.abs
 import kotlin.math.sign
-import kotlin.math.sin
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
 class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVelocity: VelocityUnit = 3.fps) : Command() {
 
-    lateinit var initPose: Pose2d
+    var init = Double.NaN
 
-    val dist = relativeDistance()
+    lateinit var dist: DistanceUnit
 
     val leftPid = VelocityPIDFController(
 //            p = Constants.DRIVETRAIN_P,
@@ -36,21 +34,21 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
             currentVelocity = { driveBase.rightVelocity.fps }
     )
 
-    private val velocity = baseVelocity.fps * sign(dist.ft)
+    private var velocity = Double.NaN
 
     init {
         requires(driveBase)
     }
 
-    var checkY = false
-
     override fun initialize() {
-        initPose = Localization.position
-        checkY = when {
-            sin(initPose.theta) > 0.5 -> true
-            else -> false
-        }
-        Localization.reset()
+        init = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        dist = relativeDistance()
+        velocity = baseVelocity.fps * sign(dist.ft)
+    }
+
+    override fun end() {
+        driveBase.stop()
+        println("At end of drive straight, pose is ${Localization.position}")
     }
 
     override fun execute() {
@@ -63,26 +61,8 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
     }
 
     override fun isFinished(): Boolean {
-        val pose = Localization.position
-        return if (checkY) {
-            abs(pose.y) >= abs(dist.ft)
-        } else {
-            abs(pose.x) >= abs(dist.ft)
-        }
-    }
-
-    override fun end() {
-        driveBase.stop()
-        val newPose = Localization.position
-        val mergedPose = Pose2d(
-                x = initPose.x + newPose.x,
-                y = initPose.y + newPose.y,
-                theta = initPose.theta + newPose.theta
-        )
-
-        Localization.reset(resetPose = mergedPose)
-        println("Initial pose: $initPose")
-        println("Terminating pose: $newPose")
-        println("Final pose: $mergedPose")
+        val pos = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        val absPos = abs(pos - init)
+        return absPos >= abs(dist.ft)
     }
 }

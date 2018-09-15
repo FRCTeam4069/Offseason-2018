@@ -19,9 +19,9 @@ class AutoCommandGroup : CommandGroup() {
         addSequential(WaitCommand(0.5))
         addSequential(SetIntakeSpeedCommand(0.0))
         addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.MINIMUM, 0.7))
-        addSequential(DriveStraightCommand({ (-2.3).ft }, baseVelocity = 5.fps))
+        addSequential(DriveStraightCommand({ (-2.7).ft }, baseVelocity = 3.fps))
         addSequential(WaitCommand(0.2))
-        addSequential(TurnToAngleCommand(88.5))
+        addSequential(TurnToAngleCommand(90.0))
         addSequential(WaitCommand(0.3))
         addParallel(SetIntakeSpeedCommand(1.0))
         val command = ForwardIntakeCommand()
@@ -33,5 +33,7 @@ class AutoCommandGroup : CommandGroup() {
         addSequential(TurnToAngleCommand(-90.0))
         addSequential(DriveStraightCommand({ 1.5.ft}))
         addSequential(SetIntakeSpeedCommand(-1.0))
+        addSequential(WaitCommand(0.3))
+        addSequential(SetIntakeSpeedCommand(0.0))
     }
 }
