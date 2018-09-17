@@ -34,7 +34,7 @@ class Robot : IterativeRobot() {
     }
 
     override fun autonomousInit() {
-        Scheduler.getInstance().add(FollowPathCommand("switch-right-new.csv", true))//.start()
+        Scheduler.getInstance().add(FollowPathCommand("close-scale-5fps.csv", true))//.start()
 //        Scheduler.getInstance().add(AutoCommandGroup())
     }
 

@@ -13,15 +13,15 @@ import jaci.pathfinder.Trajectory
 import java.io.File
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
-    private val follower = RamsyeetPathFollower(path, 0.5, 0.9)
+class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
+    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
 
     private var lastVelocity = 0.0 to 0.0
     val dt = path[0].dt
 
     private val lController = VelocityPIDFController(
             p = Constants.DRIVETRAIN_P,
-//            d = Constants.DRIVETRAIN_D,
+            d = Constants.DRIVETRAIN_D,
             v = Constants.DRIVETRAIN_V,
             s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.leftVelocity.fps }
@@ -29,7 +29,7 @@ class FollowPathCommand(val path: Trajectory, zeroPose: Boolean) : Command() {
 
     private val rController = VelocityPIDFController(
             p = Constants.DRIVETRAIN_P,
-//            d = Constants.DRIVETRAIN_D,
+            d = Constants.DRIVETRAIN_D,
             v = Constants.DRIVETRAIN_V,
             s = Constants.DRIVETRAIN_S,
             currentVelocity = { driveBase.rightVelocity.fps }

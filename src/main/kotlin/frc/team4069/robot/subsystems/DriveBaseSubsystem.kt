@@ -61,6 +61,11 @@ object DriveBaseSubsystem : Subsystem() {
         rightEncoder.reset()
     }
 
+    fun reverse() {
+        leftEncoder.reversed = !leftEncoder.reversed
+        rightEncoder.reversed = !rightEncoder.reversed
+    }
+
     /**
      * Drives using a drive algortihm with constant curvature given [turn], [speed], and [quickTurn]
      *
