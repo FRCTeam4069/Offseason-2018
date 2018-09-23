@@ -14,6 +14,8 @@ import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
 class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVelocity: VelocityUnit = 3.fps) : Command() {
 
+    constructor(dist: DistanceUnit, baseVelocity: VelocityUnit = 3.fps) : this({ dist }, baseVelocity)
+
     var init = Double.NaN
 
     lateinit var dist: DistanceUnit

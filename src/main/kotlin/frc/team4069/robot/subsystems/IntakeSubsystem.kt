@@ -3,13 +3,13 @@ package frc.team4069.robot.subsystems
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.intake.OperatorControlIntakeCommand
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object IntakeSubsystem : Subsystem() {
-//    override var defaultCommand: Command? = OperatorControlIntakeCommand()
-    private val leftSide = SaturnSRX(14)
-    private val rightSide = SaturnSRX(21)
+    private val leftSide = SaturnSRX(RobotMap.INTAKE_LEFT_SRX)
+    private val rightSide = SaturnSRX(RobotMap.INTAKE_RIGHT_SRX)
 
     override fun initDefaultCommand() {
         defaultCommand = OperatorControlIntakeCommand()

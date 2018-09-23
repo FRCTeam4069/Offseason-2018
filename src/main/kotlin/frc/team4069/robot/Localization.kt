@@ -11,7 +11,6 @@ object Localization {
 
     private var prevL = 0.0
     private var prevR = 0.0
-    private var prevA = 0.0
 
     var position = Pose2d(0.0, 0.0, 0.0)
         @Synchronized get
@@ -45,6 +44,9 @@ object Localization {
             val x = dist * cos(heading)
             val y = dist * sin(heading)
 
+//            position.translation.x += x
+//            position.translation.y += y
+//            position.rotation.radians = heading
             position.x += x
             position.y += y
             position.theta = heading

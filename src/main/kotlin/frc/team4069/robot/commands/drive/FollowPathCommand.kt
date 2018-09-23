@@ -13,11 +13,14 @@ import jaci.pathfinder.Trajectory
 import java.io.File
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
-    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
+class FollowPathCommand(path: Trajectory, zeroPose: Boolean, reversed: Boolean = false) : Command() {
+//    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
+    private val follower: RamsyeetPathFollower
 
     private var lastVelocity = 0.0 to 0.0
     val dt = path[0].dt
+
+    val sign = if(reversed) -1 else 1
 
     private val lController = VelocityPIDFController(
             p = Constants.DRIVETRAIN_P,
@@ -44,7 +47,27 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
             println("Pos: ${Localization.position}")
         }
 
-        println("Path is ${path.length()} segments long")
+        follower = if(reversed) {
+            val dist = path.segments.last().position
+            val newPath = Trajectory(path.segments.reversed()
+                    .map {
+                        Trajectory.Segment(
+                                it.dt,
+                                it.x,
+                                it.y,
+                                dist - it.position,
+                                -it.velocity,
+                                -it.acceleration,
+                                -it.jerk,
+                                it.heading
+                        )
+                    }.toTypedArray())
+            RamsyeetPathFollower(newPath, Constants.kZeta, Constants.kB)
+        }else {
+            RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
+        }
+
+        println("Path is ${path.length() * dt} seconds long")
     }
 
     override fun initialize() {
@@ -79,7 +102,7 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean) : Command() {
         return follower.isFinished
     }
 
-    constructor(csvName: String, zeroPose: Boolean) : this(Pathfinder.readFromCSV(File("/home/lvuser/paths/$csvName")), zeroPose)
+    constructor(csvName: String, zeroPose: Boolean, reversed: Boolean = false) : this(Pathfinder.readFromCSV(File("/home/lvuser/paths/$csvName")), zeroPose, reversed)
 
     private fun updateDashboard() {
         val seg = follower.getCurrentSegment()

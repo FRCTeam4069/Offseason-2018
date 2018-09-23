@@ -3,6 +3,7 @@ package frc.team4069.robot.subsystems
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
+import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.distance.NativeUnits
@@ -13,10 +14,10 @@ import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object DriveBaseSubsystem : Subsystem() {
-    private val leftDrive = SaturnSRX(12, slaveIds = *intArrayOf(11, 13))
+    private val leftDrive = SaturnSRX(RobotMap.DRIVEBASE_LEFT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_LEFT_SLAVES_SRX)
     private val leftEncoder = SaturnEncoder(256, 0, 1)
 
-    private val rightDrive = SaturnSRX(19, slaveIds = *intArrayOf(18, 20))
+    private val rightDrive = SaturnSRX(RobotMap.DRIVEBASE_RIGHT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX)
     private val rightEncoder = SaturnEncoder(256, 8, 9, true)
 
 

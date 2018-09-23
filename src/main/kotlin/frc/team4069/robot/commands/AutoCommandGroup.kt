@@ -5,9 +5,11 @@ import edu.wpi.first.wpilibj.command.WaitCommand
 import frc.team4069.robot.commands.drive.DriveStraightCommand
 import frc.team4069.robot.commands.drive.FollowPathCommand
 import frc.team4069.robot.commands.drive.TurnToAngleCommand
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.ForwardIntakeCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.saturn.lib.command.commandGroup
 import frc.team4069.saturn.lib.math.uom.distance.ft
 import frc.team4069.saturn.lib.math.uom.velocity.fps
 
@@ -36,4 +38,29 @@ class AutoCommandGroup : CommandGroup() {
         addSequential(WaitCommand(0.3))
         addSequential(SetIntakeSpeedCommand(0.0))
     }
+}
+
+val switchRight = commandGroup {
+    -DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 2.5)
+    +FollowPathCommand("switch-right-new.csv", true)
+    +SetIntakeSpeedCommand(-0.7)
+    +WaitCommand(0.5)
+    +SetIntakeSpeedCommand(0.0)
+    -DelayRunElevatorCommand(ElevatorSubsystem.Position.MINIMUM, 0.7)
+    +DriveStraightCommand((-2.7).ft)
+    +WaitCommand(0.2)
+    +TurnToAngleCommand(90.0)
+    +WaitCommand(0.3)
+    -SetIntakeSpeedCommand(1.0)
+    val cmd = ForwardIntakeCommand()
+    +cmd
+    +WaitCommand(0.3)
+    +SetIntakeSpeedCommand(0.0)
+    -SetElevatorPositionCommand(ElevatorSubsystem.Position.SWITCH)
+    +DriveStraightCommand({ (-cmd.finalDist).ft })
+    +TurnToAngleCommand(-90.0)
+    +DriveStraightCommand(1.5.ft)
+    +SetIntakeSpeedCommand(-1.0)
+    +WaitCommand(0.3)
+    +SetIntakeSpeedCommand(0.0)
 }

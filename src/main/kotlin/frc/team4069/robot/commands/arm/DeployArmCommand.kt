@@ -15,6 +15,6 @@ class DeployArmCommand : InstantCommand() {
     }
 
     override fun initialize() {
-        ArmSubsystem.position = ArmSubsystem.MAX_POSITION_TICKS - 300.0
+        ArmSubsystem.position = ArmSubsystem.MAX_POSITION_TICKS - 200.0
     }
 }

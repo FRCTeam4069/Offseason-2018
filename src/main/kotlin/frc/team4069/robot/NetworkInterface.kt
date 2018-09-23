@@ -35,4 +35,8 @@ object NetworkInterface {
 
         notifier.startPeriodic(0.02)
     }
+
+    fun stopTracking() {
+        notifier.stop()
+    }
 }

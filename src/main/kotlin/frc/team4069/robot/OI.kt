@@ -1,14 +1,36 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj.XboxController
+import frc.team4069.robot.commands.arm.DeployArmCommand
+import frc.team4069.robot.commands.arm.DownArmCommand
+import frc.team4069.robot.commands.arm.RetractArmCommand
+import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.winch.StartWinchCommand
+import frc.team4069.robot.commands.winch.StopWinchCommand
+import frc.team4069.saturn.lib.hid.kA
+import frc.team4069.saturn.lib.hid.kB
+import frc.team4069.saturn.lib.hid.kX
+import frc.team4069.saturn.lib.hid.xboxController
 
 object OI {
 
 //    private val driveJoystick: Controller
 //    val controlJoystick: Controller
 
-    val driveJoystick = XboxController(0)
+    val driveJoystick = xboxController(0) {
+        button(kA) {
+            pressed(DeployArmCommand())
+        }
+
+        button(kX) {
+            pressed(DownArmCommand())
+            released(StopArmCommand())
+        }
+
+        button(kB) {
+            pressed(RetractArmCommand())
+        }
+    }
 //    val driveJoystick = xboxController(0) {
 //        button(kA) {
 //            val cmd = DriveCommand(DriveCommand.Direction.FORWARDS)
@@ -18,7 +40,19 @@ object OI {
 //    }
 //
 //    val controlJoystick = xboxController(1) {}
-    val controlJoystick = XboxController(1)
+    val controlJoystick = xboxController(1) {
+        button(kA) {
+            pressed(StartWinchCommand())
+            released(StopWinchCommand())
+        }
+
+        button(kB) {
+            pressed(StartWinchCommand(reversed = true))
+            released(StopWinchCommand())
+        }
+
+
+    }
 
 //    init {
 //
