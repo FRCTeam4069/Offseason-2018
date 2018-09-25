@@ -17,7 +17,8 @@ object DriveBaseSubsystem : Subsystem() {
     private val leftDrive = SaturnSRX(RobotMap.DRIVEBASE_LEFT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_LEFT_SLAVES_SRX)
     private val leftEncoder = SaturnEncoder(256, 0, 1)
 
-    private val rightDrive = SaturnSRX(RobotMap.DRIVEBASE_RIGHT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX)
+    private val rightDrive =
+        SaturnSRX(RobotMap.DRIVEBASE_RIGHT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX)
     private val rightEncoder = SaturnEncoder(256, 8, 9, true)
 
 
@@ -49,6 +50,20 @@ object DriveBaseSubsystem : Subsystem() {
     init {
         leftEncoder.distancePerPulse = 0.0075421
         rightEncoder.distancePerPulse = 0.0075421
+
+        leftDrive.apply {
+            configContinuousCurrentLimit(40, 0)
+            configPeakCurrentLimit(0, 0)
+            configPeakCurrentDuration(0, 0)
+            enableCurrentLimit(true)
+        }
+
+        rightDrive.apply {
+            configContinuousCurrentLimit(40, 0)
+            configPeakCurrentLimit(0, 0)
+            configPeakCurrentDuration(0, 0)
+            enableCurrentLimit(true)
+        }
     }
 
     fun stop() {
@@ -76,7 +91,7 @@ object DriveBaseSubsystem : Subsystem() {
         val angularPower: Double
         val overPower: Boolean
 
-        if(quickTurn) {
+        if (quickTurn) {
             if (Math.abs(speed) < stopThreshold) {
                 stopAccumulator = (1 - stopAlpha) * stopAccumulator + stopAlpha * turn.coerceIn(-1.0, 1.0) * 2.0
             }

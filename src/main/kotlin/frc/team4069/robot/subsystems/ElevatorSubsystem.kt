@@ -31,6 +31,11 @@ object ElevatorSubsystem : Subsystem() {
             motionAcceleration = 2500
             motionCruiseVelocity = 3000
 
+            configPeakCurrentLimit(35, 0)
+            configPeakCurrentDuration(250, 0)
+            configContinuousCurrentLimit(32, 0)
+            enableCurrentLimit(true)
+
             configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0)
             configReverseSoftLimitEnable(true, 0)
         }

@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.commands.OperatorControlCommandGroup
-import frc.team4069.robot.commands.drive.FollowPathCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -35,7 +34,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun autonomousInit() {
-        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
+//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
     }
 
     override fun teleopInit() {
