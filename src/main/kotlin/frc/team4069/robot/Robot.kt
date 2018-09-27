@@ -3,6 +3,7 @@ package frc.team4069.robot
 import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
+import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.commands.OperatorControlCommandGroup
 import frc.team4069.robot.subsystems.ArmSubsystem
@@ -14,6 +15,7 @@ import frc.team4069.saturn.lib.SaturnRobot
 class Robot : SaturnRobot() {
 
     override fun robotInit() {
+        LiveWindow.disableAllTelemetry()
         Localization
         NTConnection
         NetworkInterface
@@ -35,14 +37,17 @@ class Robot : SaturnRobot() {
 
     override fun autonomousInit() {
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
+        Pneumatics.enable()
     }
 
     override fun teleopInit() {
         Scheduler.getInstance().add(OperatorControlCommandGroup())
+        Pneumatics.enable()
     }
 
     override fun disabledInit() {
         NetworkInterface.stopTracking()
+        Pneumatics.disable()
     }
 
     companion object {

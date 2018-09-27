@@ -5,6 +5,7 @@ import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.saturn.lib.hid.kA
@@ -42,8 +43,9 @@ object OI {
 //    val controlJoystick = xboxController(1) {}
     val controlJoystick = xboxController(1) {
         button(kA) {
-            pressed(StartWinchCommand())
-            released(StopWinchCommand())
+//            pressed(StartWinchCommand())
+//            released(StopWinchCommand())
+            pressed(ToggleOpenIntakeCommand())
         }
 
         button(kB) {

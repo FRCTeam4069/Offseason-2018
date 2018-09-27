@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import kotlin.math.abs
 
-class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command() {
+class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position, val instant: Boolean = false) : Command() {
 
     init {
         requires(ElevatorSubsystem)
@@ -15,6 +15,7 @@ class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command(
     }
 
     override fun isFinished(): Boolean {
-        return abs(abs(ElevatorSubsystem.position) - abs(pos.ticks)) <= 200
+        return instant || abs(abs(ElevatorSubsystem.position) - abs(pos.ticks)) <= 200
+//        return abs(abs(ElevatorSubsystem.position) - abs(pos.ticks)) <= 200
     }
 }

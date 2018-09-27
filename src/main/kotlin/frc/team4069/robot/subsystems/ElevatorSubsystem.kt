@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.command.Subsystem
 import frc.team4069.robot.OI
 import frc.team4069.robot.RobotMap
-import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
@@ -13,7 +12,7 @@ object ElevatorSubsystem : Subsystem() {
 //    override var defaultCommand: Command? = OperatorControlElevatorCommand()
 
     override fun initDefaultCommand() {
-        defaultCommand = OperatorControlElevatorCommand()
+//        defaultCommand = OperatorControlElevatorCommand()
     }
 
     private val talon = SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = true, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
@@ -45,10 +44,10 @@ object ElevatorSubsystem : Subsystem() {
         val angle = OI.controlJoystick.pov
         val scheduler = Scheduler.getInstance()
         when (angle) {
-            90 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH))
-            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE))
-            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM))
-            270 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY))
+            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH, instant = true))
+            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE, instant = true))
+            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM, instant = true))
+            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY, instant = true))
         }
     }
 

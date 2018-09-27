@@ -13,6 +13,10 @@ class OperatorControlElevatorCommand : Command() {
         requires(ElevatorSubsystem)
     }
 
+    override fun initialize() {
+        println("Operator command init")
+    }
+
     override fun execute() {
         val elevatorAxis = OI.elevatorAxis * 0.8
 
@@ -25,6 +29,10 @@ class OperatorControlElevatorCommand : Command() {
                 set = true
             }
         }
+    }
+
+    override fun end() {
+        println("operator command end")
     }
 
     override fun isFinished(): Boolean {
