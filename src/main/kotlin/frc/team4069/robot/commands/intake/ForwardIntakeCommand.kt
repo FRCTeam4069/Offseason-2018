@@ -28,7 +28,7 @@ class ForwardIntakeCommand(val forwardThreshold: DistanceUnit = 6.ft) : Command(
         threshold = init + forwardThreshold.ft
 
         driveBase.set(ControlMode.PercentOutput, 0.3, 0.3)
-        intake.set(1.0, false)
+        intake.set(1.0)
     }
 
     override fun end() {
@@ -42,7 +42,7 @@ class ForwardIntakeCommand(val forwardThreshold: DistanceUnit = 6.ft) : Command(
         val pose = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
         val absPos = abs(pose - init)
 
-        return intake.outputCurrent >= 30.0 || absPos >= abs(forwardThreshold.ft)
+        return intake.outputCurrent >= 15.0 || absPos >= abs(forwardThreshold.ft)
 //        outCondition = if(checkY) {
 //            outCondition || pose.y >= threshold
 //        }else {

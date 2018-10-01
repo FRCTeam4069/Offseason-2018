@@ -10,10 +10,6 @@ class SetIntakeSpeedCommand(private val speed: Double) : InstantCommand() {
     }
 
     override fun initialize() {
-        IntakeSubsystem.set(speed, false)
-    }
-
-    override fun end() {
-        IntakeSubsystem.stop()
+        IntakeSubsystem.set(speed)
     }
 }

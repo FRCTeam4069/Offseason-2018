@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.command.Subsystem
 import frc.team4069.robot.OI
 import frc.team4069.robot.RobotMap
+import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
@@ -12,10 +13,11 @@ object ElevatorSubsystem : Subsystem() {
 //    override var defaultCommand: Command? = OperatorControlElevatorCommand()
 
     override fun initDefaultCommand() {
-//        defaultCommand = OperatorControlElevatorCommand()
+        defaultCommand = OperatorControlElevatorCommand()
     }
 
-    private val talon = SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = true, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
+    private val talon =
+        SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = true, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
 
     private const val MAX_POSITION_TICKS = -29000
 
@@ -23,20 +25,20 @@ object ElevatorSubsystem : Subsystem() {
         talon.apply {
             invertSensorPhase = true
 
-            p = 0.5
-            d = 0.1
+            p = 0.7
+            d = 0.01
             f = 0.5
 
             motionAcceleration = 2500
             motionCruiseVelocity = 3000
 
-            configPeakCurrentLimit(35, 0)
-            configPeakCurrentDuration(250, 0)
-            configContinuousCurrentLimit(32, 0)
-            enableCurrentLimit(true)
+            peakCurrentLimit = 35
+            peakCurrentDuration = 250
+            continuousCurrentLimit = 32
+            currentLimitEnabled = true
 
-            configReverseSoftLimitThreshold(MAX_POSITION_TICKS, 0)
-            configReverseSoftLimitEnable(true, 0)
+            reverseSoftLimitThreshold = MAX_POSITION_TICKS
+            reverseSoftLimitEnabled = true
         }
     }
 
@@ -44,10 +46,10 @@ object ElevatorSubsystem : Subsystem() {
         val angle = OI.controlJoystick.pov
         val scheduler = Scheduler.getInstance()
         when (angle) {
-            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH, instant = true))
-            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE, instant = true))
-            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM, instant = true))
-            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY, instant = true))
+            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH))
+            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE))
+            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM))
+            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY))
         }
     }
 
@@ -57,6 +59,17 @@ object ElevatorSubsystem : Subsystem() {
 
     val position: Int
         get() = talon.getSelectedSensorPosition(0)
+
+    fun reduceLimits() {
+        talon.apply {
+            currentLimitEnabled = false
+            peakCurrentLimit = 0
+            peakCurrentDuration = 0
+
+            continuousCurrentLimit = 26
+            currentLimitEnabled = true
+        }
+    }
 
     enum class Position(val ticks: Int) {
         MINIMUM(0),

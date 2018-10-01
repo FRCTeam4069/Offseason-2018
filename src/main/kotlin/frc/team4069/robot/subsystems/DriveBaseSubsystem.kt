@@ -52,17 +52,17 @@ object DriveBaseSubsystem : Subsystem() {
         rightEncoder.distancePerPulse = 0.0075421
 
         leftDrive.apply {
-            configContinuousCurrentLimit(40, 0)
-            configPeakCurrentLimit(0, 0)
-            configPeakCurrentDuration(0, 0)
-            enableCurrentLimit(true)
+            continuousCurrentLimit = 40
+            peakCurrentLimit = 0
+            peakCurrentDuration = 0
+            currentLimitEnabled = true
         }
 
         rightDrive.apply {
-            configContinuousCurrentLimit(40, 0)
-            configPeakCurrentLimit(0, 0)
-            configPeakCurrentDuration(0, 0)
-            enableCurrentLimit(true)
+            continuousCurrentLimit = 40
+            peakCurrentLimit = 0
+            peakCurrentDuration = 0
+            currentLimitEnabled = true
         }
     }
 
@@ -139,5 +139,19 @@ object DriveBaseSubsystem : Subsystem() {
     fun set(mode: ControlMode, left: Double, right: Double) {
         leftDrive.set(mode, left)
         rightDrive.set(mode, right)
+    }
+
+    fun reduceLimits() {
+        leftDrive.apply {
+            currentLimitEnabled = false
+            continuousCurrentLimit = 30
+            currentLimitEnabled = true
+        }
+
+        rightDrive.apply {
+            currentLimitEnabled = false
+            continuousCurrentLimit = 30
+            currentLimitEnabled = true
+        }
     }
 }

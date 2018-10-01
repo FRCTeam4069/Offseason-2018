@@ -1,17 +1,15 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
+import edu.wpi.first.wpilibj.command.InstantCommand
 import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
-import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
-import frc.team4069.saturn.lib.hid.kA
-import frc.team4069.saturn.lib.hid.kB
-import frc.team4069.saturn.lib.hid.kX
-import frc.team4069.saturn.lib.hid.xboxController
+import frc.team4069.robot.subsystems.IntakeSubsystem
+import frc.team4069.saturn.lib.hid.*
 
 object OI {
 
@@ -45,7 +43,7 @@ object OI {
         button(kA) {
 //            pressed(StartWinchCommand())
 //            released(StopWinchCommand())
-            pressed(ToggleOpenIntakeCommand())
+//            pressed(ToggleOpenIntakeCommand())
         }
 
         button(kB) {
@@ -53,7 +51,17 @@ object OI {
             released(StopWinchCommand())
         }
 
+        button(kY) {
+            pressed(object : InstantCommand() {
+                init {
+                    requires(IntakeSubsystem)
+                }
 
+                override fun initialize() {
+                    IntakeSubsystem.disableSolenoid()
+                }
+            })
+        }
     }
 
 //    init {

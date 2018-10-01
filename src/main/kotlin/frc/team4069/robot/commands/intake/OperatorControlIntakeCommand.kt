@@ -12,7 +12,7 @@ class OperatorControlIntakeCommand : Command() {
     override fun execute() {
         val axis = OI.intakeAxis
 //        val reverse = OI.controlJoystick.button(ButtonType.LEFT_STICK).value
-        IntakeSubsystem.set(axis, false)
+        IntakeSubsystem.set(axis)
     }
 
     override fun isFinished(): Boolean {
