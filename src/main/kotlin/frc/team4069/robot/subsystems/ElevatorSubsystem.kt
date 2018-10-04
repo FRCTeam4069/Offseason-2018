@@ -46,10 +46,10 @@ object ElevatorSubsystem : Subsystem() {
         val angle = OI.controlJoystick.pov
         val scheduler = Scheduler.getInstance()
         when (angle) {
-            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH))
-            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE))
-            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM))
-            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY))
+            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH, instant = true))
+            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE, instant = true))
+            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM, instant = true))
+            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY, instant = true))
         }
     }
 

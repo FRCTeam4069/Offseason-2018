@@ -6,6 +6,7 @@ import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.robot.subsystems.IntakeSubsystem
@@ -43,7 +44,7 @@ object OI {
         button(kA) {
 //            pressed(StartWinchCommand())
 //            released(StopWinchCommand())
-//            pressed(ToggleOpenIntakeCommand())
+            pressed(ToggleOpenIntakeCommand())
         }
 
         button(kB) {
