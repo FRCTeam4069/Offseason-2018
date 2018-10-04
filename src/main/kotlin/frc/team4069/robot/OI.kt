@@ -1,7 +1,6 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
-import edu.wpi.first.wpilibj.command.InstantCommand
 import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
@@ -19,20 +18,20 @@ object OI {
 
     val driveJoystick = xboxController(0) {
         button(kA) {
-            pressed(DeployArmCommand())
+            changeOn(DeployArmCommand())
         }
 
         button(kX) {
-            pressed(DownArmCommand())
-            released(StopArmCommand())
+            changeOn(DownArmCommand())
+            changeOff(StopArmCommand())
         }
 
         button(kB) {
-            pressed(RetractArmCommand())
+            changeOn(RetractArmCommand())
         }
     }
 //    val driveJoystick = xboxController(0) {
-//        button(kA) {
+//        control(kA) {
 //            val cmd = DriveCommand(DriveCommand.Direction.FORWARDS)
 //            changeOn(cmd)
 //            changeOff { cmd.stop() }
@@ -44,30 +43,20 @@ object OI {
         button(kA) {
 //            pressed(StartWinchCommand())
 //            released(StopWinchCommand())
-            pressed(ToggleOpenIntakeCommand())
+            changeOn(ToggleOpenIntakeCommand())
         }
 
         button(kB) {
-            pressed(StartWinchCommand(reversed = true))
-            released(StopWinchCommand())
+            changeOn(StartWinchCommand(reversed = true))
+            changeOff(StopWinchCommand())
         }
 
         button(kY) {
-            pressed(object : InstantCommand() {
-                init {
-                    requires(IntakeSubsystem)
-                }
-
-                override fun initialize() {
-                    IntakeSubsystem.disableSolenoid()
-                }
-            })
+            changeOn {
+                IntakeSubsystem.disableSolenoid()
+            }
         }
     }
-
-//    init {
-//
-//    }
 
     val turningAxis: Double
         get() {

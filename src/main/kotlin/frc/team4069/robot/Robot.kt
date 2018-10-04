@@ -19,6 +19,9 @@ class Robot : SaturnRobot() {
         NTConnection
         NetworkInterface
 
+        +OI.driveJoystick
+        +OI.controlJoystick
+
         // Subsystem initialization
         DriveBaseSubsystem
         ArmSubsystem
