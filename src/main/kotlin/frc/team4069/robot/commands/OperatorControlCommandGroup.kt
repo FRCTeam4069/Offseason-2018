@@ -1,9 +1,9 @@
 package frc.team4069.robot.commands
 
+import edu.wpi.first.wpilibj.command.CommandGroup
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
 import frc.team4069.robot.commands.intake.OperatorControlIntakeCommand
-import frc.team4069.saturn.lib.command.CommandGroup
 
 class OperatorControlCommandGroup : CommandGroup() {
     init {
@@ -12,3 +12,4 @@ class OperatorControlCommandGroup : CommandGroup() {
         addParallel(OperatorControlIntakeCommand())
     }
 }
+

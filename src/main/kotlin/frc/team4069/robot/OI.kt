@@ -2,39 +2,60 @@ package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
 import frc.team4069.robot.commands.arm.DeployArmCommand
-import frc.team4069.robot.commands.arm.StartArmCommand
-import frc.team4069.robot.commands.drive.DriveCommand
-import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
-import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.subsystems.ArmSubsystem
-import frc.team4069.robot.subsystems.DriveBaseSubsystem
-import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.robot.commands.arm.DownArmCommand
+import frc.team4069.robot.commands.arm.RetractArmCommand
+import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
+import frc.team4069.robot.commands.winch.StartWinchCommand
+import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.robot.subsystems.IntakeSubsystem
-import frc.team4069.saturn.lib.command
-import frc.team4069.saturn.lib.hid.ButtonType
-import frc.team4069.saturn.lib.hid.Controller
+import frc.team4069.saturn.lib.hid.*
 
 object OI {
-    private val driveJoystick = Controller(0)
-    private val controlJoystick = Controller(1)
 
-    init {
-        // Slow outtake command
-        controlJoystick.button(ButtonType.BUMPER_RIGHT)
-                .whenPressed(SetIntakeSpeedCommand(-0.5))
-                .whenReleased(command(IntakeSubsystem::stop))
+//    private val driveJoystick: Controller
+//    val controlJoystick: Controller
 
-        controlJoystick.button(ButtonType.Y)
-                .whenPressed(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE))
+    val driveJoystick = xboxController(0) {
+        button(kA) {
+            changeOn(DeployArmCommand())
+        }
 
-        driveJoystick.button(ButtonType.BUMPER_RIGHT)
-                .whenPressed(DriveCommand(DriveCommand.Direction.FORWARDS))
-                .whenReleased(command(DriveBaseSubsystem::stop))
-        driveJoystick.button(ButtonType.Y)
-                .whenPressed(DeployArmCommand())
-        driveJoystick.button(ButtonType.A)
-                .whenPressed(StartArmCommand(true))
-                .whenReleased(command(ArmSubsystem::stop))
+        button(kX) {
+            changeOn(DownArmCommand())
+            changeOff(StopArmCommand())
+        }
+
+        button(kB) {
+            changeOn(RetractArmCommand())
+        }
+    }
+//    val driveJoystick = xboxController(0) {
+//        control(kA) {
+//            val cmd = DriveCommand(DriveCommand.Direction.FORWARDS)
+//            changeOn(cmd)
+//            changeOff { cmd.stop() }
+//        }
+//    }
+//
+//    val controlJoystick = xboxController(1) {}
+    val controlJoystick = xboxController(1) {
+        button(kA) {
+//            pressed(StartWinchCommand())
+//            released(StopWinchCommand())
+            changeOn(ToggleOpenIntakeCommand())
+        }
+
+        button(kB) {
+            changeOn(StartWinchCommand(reversed = true))
+            changeOff(StopWinchCommand())
+        }
+
+        button(kY) {
+            changeOn {
+                IntakeSubsystem.disableSolenoid()
+            }
+        }
     }
 
     val turningAxis: Double

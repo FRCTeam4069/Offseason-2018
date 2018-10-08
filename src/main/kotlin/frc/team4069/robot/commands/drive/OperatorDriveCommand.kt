@@ -1,8 +1,8 @@
 package frc.team4069.robot.commands.drive
 
+import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.OI
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
-import frc.team4069.saturn.lib.command.Command
 
 class OperatorDriveCommand : Command() {
 
@@ -10,17 +10,18 @@ class OperatorDriveCommand : Command() {
         requires(DriveBaseSubsystem)
     }
 
-    override fun onCreate() {
+    override fun initialize() {
         DriveBaseSubsystem.stop()
     }
 
-    override fun periodic() {
-
+    override fun execute() {
         val turning = OI.turningAxis
         val speed = OI.driveSpeed
 
-        DriveBaseSubsystem.drive(turning, speed)
+        DriveBaseSubsystem.curvatureDrive(turning, speed, speed == 0.0)
     }
 
-    override val isFinished: Boolean = false
+    override fun isFinished(): Boolean {
+        return false
+    }
 }

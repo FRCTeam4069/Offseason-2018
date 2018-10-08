@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = "1.2.41"
+    ext.kotlin_version = "1.2.71"
 
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
 }
 plugins {
-    id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
+    id "edu.wpi.first.GradleRIO" version "2018.06.21"
 }
 
 def TEAM = 4069
@@ -30,31 +30,33 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 //    compile 'com.github.Redrield:SaturnShell:0.0.5-command'
-    compile files("libs/saturnshell.jar")
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0"
+//    compile files("libs/saturnshell.jar")
+    compile project(":SaturnShell")
 
     compile wpilib()
     compile ctre()
+    compile pathfinder()
 }
 
 deploy {
     targets {
-        target("roborio", jaci.openrio.gradle.frc.RoboRIO) {
+        target("roborio", edu.wpi.first.gradlerio.frc.RoboRIO) {
             team = TEAM
         }
     }
     artifacts {
-        artifact("frcJava", jaci.openrio.gradle.frc.FRCJavaArtifact) {
+        artifact("frcJava", edu.wpi.first.gradlerio.frc.FRCJavaArtifact) {
             targets << "roborio"
 
-
-            //debug = true
+//            debug = true
         }
     }
 }
 
 jar {
     from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest jaci.openrio.gradle.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
 }
 
 compileKotlin {

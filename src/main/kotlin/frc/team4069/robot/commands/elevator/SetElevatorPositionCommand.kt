@@ -1,18 +1,18 @@
 package frc.team4069.robot.commands.elevator
 
+import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.subsystems.ElevatorSubsystem
-import frc.team4069.saturn.lib.command.Command
+import kotlin.math.abs
 
-class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position) : Command() {
+class SetElevatorPositionCommand(val pos: ElevatorSubsystem.Position, val instant: Boolean = false) : Command() {
 
     init {
         requires(ElevatorSubsystem)
     }
 
-    override fun onCreate() {
+    override fun initialize() {
         ElevatorSubsystem.set(pos)
     }
 
-    override val isFinished: Boolean
-        get() = Math.abs(Math.abs(ElevatorSubsystem.position) - Math.abs(pos.ticks)) <= 200
+    override fun isFinished() = instant || abs(abs(ElevatorSubsystem.position) - abs(pos.ticks)) <= 325
 }

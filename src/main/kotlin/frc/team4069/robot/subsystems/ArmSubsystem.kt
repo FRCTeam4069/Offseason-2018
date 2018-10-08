@@ -1,14 +1,12 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import frc.team4069.saturn.lib.command.Command
-import frc.team4069.saturn.lib.command.Subsystem
+import edu.wpi.first.wpilibj.command.Subsystem
+import frc.team4069.robot.RobotMap
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ArmSubsystem : Subsystem() {
-    override val defaultCommand: Command? = null
-
-    private val talon = SaturnSRX(24)
+    private val talon = SaturnSRX(RobotMap.ARM_SRX)
 
     init {
         talon.apply {
@@ -17,6 +15,12 @@ object ArmSubsystem : Subsystem() {
 
             motionCruiseVelocity = 800
             motionAcceleration = 400
+
+            configForwardSoftLimitThreshold(2700, 0)
+            configForwardSoftLimitEnable(true, 0)
+
+            configReverseSoftLimitThreshold(0, 0)
+            configReverseSoftLimitEnable(true, 0)
         }
     }
 
@@ -33,6 +37,13 @@ object ArmSubsystem : Subsystem() {
     fun reset() {
         stop()
         talon.setSelectedSensorPosition(0, 0, 0)
+    }
+
+    override fun initDefaultCommand() {
+    }
+
+    fun lockPosition() {
+        talon.set(ControlMode.MotionMagic, position)
     }
 
     const val MAX_POSITION_TICKS = 2700

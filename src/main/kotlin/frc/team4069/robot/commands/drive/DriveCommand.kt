@@ -1,23 +1,28 @@
 package frc.team4069.robot.commands.drive
 
+import com.ctre.phoenix.motorcontrol.ControlMode
+import edu.wpi.first.wpilibj.command.InstantCommand
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
-import frc.team4069.saturn.lib.command.Command
 
-class DriveCommand(val dir: Direction) : Command() {
+class DriveCommand(val dir: Direction) : InstantCommand() {
 
     init {
+//        +DriveBaseSubsystem
         requires(DriveBaseSubsystem)
     }
 
-    override fun onCreate() {
-        if(dir == Direction.FORWARDS) {
-            DriveBaseSubsystem.drive(0.0, 0.7)
-        }else {
-            DriveBaseSubsystem.drive(0.0, -0.7)
+    override fun initialize() {
+        println("Initializing command")
+        if (dir == Direction.FORWARDS) {
+            DriveBaseSubsystem.set(ControlMode.PercentOutput, 0.25, 0.25)
+        } else {
+            DriveBaseSubsystem.set(ControlMode.PercentOutput, -0.7, -0.7)
         }
     }
 
-    override val isFinished = true
+    override fun end() {
+        DriveBaseSubsystem.stop()
+    }
 
     enum class Direction {
         FORWARDS,

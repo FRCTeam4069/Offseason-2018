@@ -1,15 +1,48 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
+import edu.wpi.first.wpilibj.DoubleSolenoid
+import edu.wpi.first.wpilibj.command.Subsystem
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.intake.OperatorControlIntakeCommand
-import frc.team4069.saturn.lib.command.Subsystem
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object IntakeSubsystem : Subsystem() {
-    override val defaultCommand = OperatorControlIntakeCommand()
-    private val talon = SaturnSRX(14, slaveIds = *intArrayOf(21))
+    private val leftSide = SaturnSRX(RobotMap.INTAKE_LEFT_SRX, slaveIds = *intArrayOf(RobotMap.INTAKE_RIGHT_SRX))
 
-    fun set(spd: Double) = talon.set(ControlMode.PercentOutput, spd)
+    private val outputSolenoid = DoubleSolenoid(0, 7)
 
-    fun stop() = talon.stop()
+    override fun initDefaultCommand() {
+        defaultCommand = OperatorControlIntakeCommand()
+    }
+
+    fun set(spd: Double) {
+        leftSide.set(ControlMode.PercentOutput, spd)
+    }
+
+    override fun periodic() {
+        val current = leftSide.outputCurrent
+        if(current >= 15) {
+            SmartDashboard.putBoolean("Over 30", true)
+        }
+        SmartDashboard.putNumber("Intake current", leftSide.outputCurrent)
+    }
+
+    fun toggleSolenoid() {
+        when (outputSolenoid.get()) {
+            DoubleSolenoid.Value.kForward -> outputSolenoid.set(DoubleSolenoid.Value.kReverse)
+            else -> outputSolenoid.set(DoubleSolenoid.Value.kForward)
+        }
+    }
+
+    fun disableSolenoid() {
+        outputSolenoid.set(DoubleSolenoid.Value.kOff)
+    }
+
+    val outputCurrent: Double
+        get() = leftSide.outputCurrent
+
+    fun stop() = leftSide.stop()
+
 }
