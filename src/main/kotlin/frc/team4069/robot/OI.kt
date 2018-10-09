@@ -5,9 +5,11 @@ import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
+import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.hid.*
 
@@ -30,7 +32,7 @@ object OI {
             changeOn(RetractArmCommand())
         }
     }
-//    val driveJoystick = xboxController(0) {
+    //    val driveJoystick = xboxController(0) {
 //        control(kA) {
 //            val cmd = DriveCommand(DriveCommand.Direction.FORWARDS)
 //            changeOn(cmd)
@@ -41,8 +43,6 @@ object OI {
 //    val controlJoystick = xboxController(1) {}
     val controlJoystick = xboxController(1) {
         button(kA) {
-//            pressed(StartWinchCommand())
-//            released(StopWinchCommand())
             changeOn(ToggleOpenIntakeCommand())
         }
 
@@ -56,14 +56,19 @@ object OI {
                 IntakeSubsystem.disableSolenoid()
             }
         }
+
+        pov(POVSide.UP).changeOn(SetElevatorPositionCommand(ElevatorSubsystem.Position.SCALE, instant = true))
+        pov(POVSide.DOWN).changeOn(SetElevatorPositionCommand(ElevatorSubsystem.Position.MINIMUM, instant = true))
+        pov(POVSide.LEFT).changeOn(SetElevatorPositionCommand(ElevatorSubsystem.Position.SWITCH, instant = true))
+        pov(POVSide.RIGHT).changeOn(SetElevatorPositionCommand(ElevatorSubsystem.Position.CARRY, instant = true))
     }
 
     val turningAxis: Double
         get() {
             val axis = driveJoystick.getX(GenericHID.Hand.kLeft)
-            return if(axis in 0.0..0.2) {
+            return if (axis in 0.0..0.2) {
                 0.0
-            }else {
+            } else {
                 axis
             }
         }
@@ -79,9 +84,9 @@ object OI {
     val elevatorAxis: Double
         get() {
             val axis = controlJoystick.getY(GenericHID.Hand.kRight)
-            return if(Math.abs(axis) in 0.0..0.2) {
+            return if (Math.abs(axis) in 0.0..0.2) {
                 0.0
-            }else {
+            } else {
                 axis
             }
         }

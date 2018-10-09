@@ -2,6 +2,7 @@ package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.SPI
+import edu.wpi.first.wpilibj.SerialPort
 import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
@@ -11,8 +12,11 @@ import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.SaturnRobot
+import frc.team4069.saturn.lib.lidar.ScanseLidar
 
 class Robot : SaturnRobot() {
+    lateinit var lidar: ScanseLidar
+
     override fun robotInit() {
         LiveWindow.disableAllTelemetry()
         Localization
@@ -32,6 +36,8 @@ class Robot : SaturnRobot() {
         SmartDashboard.putBoolean("Over 30", false)
 
         DriveBaseSubsystem.reset()
+
+        lidar = ScanseLidar(SerialPort.Port.kMXP)
     }
 
     override fun autonomousInit() {
