@@ -18,7 +18,7 @@ class OperatorControlElevatorCommand : Command() {
     }
 
     override fun execute() {
-        val elevatorAxis = OI.elevatorAxis * 0.8
+        val elevatorAxis = OI.elevatorAxis
 
         if(elevatorAxis != 0.0) {
             ElevatorSubsystem.set(ControlMode.PercentOutput, elevatorAxis)

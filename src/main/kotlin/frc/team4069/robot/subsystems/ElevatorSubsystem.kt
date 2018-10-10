@@ -42,17 +42,6 @@ object ElevatorSubsystem : Subsystem() {
         }
     }
 
-    override fun periodic() {
-        val angle = OI.controlJoystick.pov
-        val scheduler = Scheduler.getInstance()
-        when (angle) {
-            270 -> scheduler.add(SetElevatorPositionCommand(Position.SWITCH, instant = true))
-            0 -> scheduler.add(SetElevatorPositionCommand(Position.SCALE, instant = true))
-            180 -> scheduler.add(SetElevatorPositionCommand(Position.MINIMUM, instant = true))
-            90 -> scheduler.add(SetElevatorPositionCommand(Position.CARRY, instant = true))
-        }
-    }
-
     fun set(mode: ControlMode, value: Double) = talon.set(mode, value)
 
     fun set(pos: Position) = set(ControlMode.MotionMagic, pos.ticks.toDouble())
