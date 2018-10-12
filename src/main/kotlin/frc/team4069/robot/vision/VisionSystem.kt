@@ -12,8 +12,8 @@ object VisionSystem {
     fun startVisionThread() {
         val camera = CameraServer.getInstance().startAutomaticCapture()
         camera.setResolution(640, 480)
-        val visionThread = VisionThread(camera, BlurPipeline(), VisionRunner.Listener { pipeline: BlurPipeline ->
-            val r = Imgproc.boundingRect(pipeline.blurOutput())
+        val visionThread = VisionThread(camera, TapePipeline(), VisionRunner.Listener { pipeline ->
+            val boundingRect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0))
             synchronized(imgLock) {
                 // do some stuff
             }
