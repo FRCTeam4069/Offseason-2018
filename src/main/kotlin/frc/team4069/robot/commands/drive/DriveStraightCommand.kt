@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.Constants
 import frc.team4069.saturn.lib.math.VelocityPIDFController
+import frc.team4069.saturn.lib.math.profile.TrapezoidalMP
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
 import frc.team4069.saturn.lib.math.uom.velocity.fps
@@ -35,16 +36,18 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
             currentVelocity = { driveBase.rightVelocity.fps }
     )
 
-    private var velocity = Double.NaN
+//    private var velocity = Double.NaN
+
+    val profile = TrapezoidalMP(relativeDistance().ft, baseVelocity.fps, 3.0)
 
     init {
         requires(driveBase)
     }
 
     override fun initialize() {
-        init = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
-        dist = relativeDistance()
-        velocity = baseVelocity.fps * sign(dist.ft)
+//        init = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+//        dist = relativeDistance()
+//        velocity = baseVelocity.fps * sign(dist.ft)
     }
 
     override fun end() {
@@ -52,17 +55,20 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
     }
 
     override fun execute() {
-        val lOut = leftPid.getPIDFOutput(velocity to 0.0)
-        val rOut = rightPid.getPIDFOutput(velocity to 0.0)
-
-        driveBase.set(ControlMode.PercentOutput,
-                lOut,
-                rOut)
+//        val lOut = leftPid.getPIDFOutput(velocity to 0.0)
+//        val rOut = rightPid.getPIDFOutput(velocity to 0.0)
+//
+//        driveBase.set(ControlMode.PercentOutput,
+//                lOut,
+//                rOut)
+        val pos = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+        val data = profile.follow(pos)
     }
 
     override fun isFinished(): Boolean {
-        val pos = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
-        val absPos = abs(pos - init)
-        return absPos >= abs(dist.ft)
+//        val pos = (driveBase.leftPosition.ft + driveBase.rightPosition.ft) / 2
+//        val absPos = abs(pos - init)
+//        return absPos >= abs(dist.ft)
+        return profile.isFinished
     }
 }
