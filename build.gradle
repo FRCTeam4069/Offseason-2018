@@ -60,6 +60,14 @@ jar {
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_CLASS)
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir "src/main/kotlin"
+        }
+    }
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
