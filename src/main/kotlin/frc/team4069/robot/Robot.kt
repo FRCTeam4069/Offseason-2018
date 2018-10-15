@@ -10,6 +10,7 @@ import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.robot.subsystems.IntakeSubsystem
+import frc.team4069.robot.vision.VisionSystem
 import frc.team4069.saturn.lib.SaturnRobot
 
 class Robot : SaturnRobot() {
@@ -32,6 +33,8 @@ class Robot : SaturnRobot() {
         SmartDashboard.putBoolean("Over 30", false)
 
         DriveBaseSubsystem.reset()
+
+        VisionSystem.startVisionThread()
     }
 
     override fun autonomousInit() {

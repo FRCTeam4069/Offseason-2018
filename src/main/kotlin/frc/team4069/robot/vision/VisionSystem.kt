@@ -8,6 +8,8 @@ import org.opencv.imgproc.Imgproc
 
 
 object VisionSystem {
+    var tapeX = 0
+    var tapeY = 0
     val imgLock = Object()
     fun startVisionThread() {
         val camera = CameraServer.getInstance().startAutomaticCapture()
@@ -15,7 +17,8 @@ object VisionSystem {
         val visionThread = VisionThread(camera, TapePipeline(), VisionRunner.Listener { pipeline ->
             val boundingRect = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0))
             synchronized(imgLock) {
-                // do some stuff
+                tapeX = boundingRect.x + (boundingRect.width / 2)
+                tapeY = boundingRect.y + (boundingRect.height / 2)
             }
         })
     }
