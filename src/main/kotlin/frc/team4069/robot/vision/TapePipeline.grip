@@ -1,7 +1,7 @@
 <grip:Pipeline>
   <sources>
     <grip:Camera>
-      <property name="deviceNumber" value="0"/>
+      <property name="deviceNumber" value="2"/>
     </grip:Camera>
   </sources>
   <steps>
@@ -9,20 +9,20 @@
       <grip:Input step="0" socket="0"/>
       <grip:Input step="0" socket="1">
         <value>
-          <double>0.0</double>
-          <double>180.0</double>
+          <double>40.46762589928058</double>
+          <double>128.04753820033957</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="2">
         <value>
-          <double>0.0</double>
-          <double>172.74193548387098</double>
+          <double>89.43345323741006</double>
+          <double>255.0</double>
         </value>
       </grip:Input>
       <grip:Input step="0" socket="3">
         <value>
-          <double>0.0</double>
-          <double>209.54159592529712</double>
+          <double>112.82374100719427</double>
+          <double>255.0</double>
         </value>
       </grip:Input>
       <grip:Output step="0" socket="0" previewed="false"/>
@@ -37,7 +37,7 @@
     <grip:Step name="Filter Contours">
       <grip:Input step="2" socket="0"/>
       <grip:Input step="2" socket="1">
-        <value>0</value>
+        <value>100.0</value>
       </grip:Input>
       <grip:Input step="2" socket="2">
         <value>0</value>
@@ -67,26 +67,26 @@
         <value>0</value>
       </grip:Input>
       <grip:Input step="2" socket="10">
-        <value>0</value>
+        <value>0.0</value>
       </grip:Input>
       <grip:Input step="2" socket="11">
-        <value>1000</value>
+        <value>1000.0</value>
       </grip:Input>
       <grip:Output step="2" socket="0" previewed="true"/>
     </grip:Step>
   </steps>
   <connections>
     <grip:Connection>
-      <grip:Output step="0" socket="0" previewed="false"/>
-      <grip:Input step="1" socket="0"/>
+      <grip:Output source="0" socket="0" previewed="false"/>
+      <grip:Input step="0" socket="0"/>
     </grip:Connection>
     <grip:Connection>
       <grip:Output step="1" socket="0" previewed="true"/>
       <grip:Input step="2" socket="0"/>
     </grip:Connection>
     <grip:Connection>
-      <grip:Output source="0" socket="0" previewed="false"/>
-      <grip:Input step="0" socket="0"/>
+      <grip:Output step="0" socket="0" previewed="false"/>
+      <grip:Input step="1" socket="0"/>
     </grip:Connection>
   </connections>
   <settings>
@@ -102,7 +102,7 @@
     <language>Java</language>
     <className>TapePipeline</className>
     <implementWpilibPipeline>true</implementWpilibPipeline>
-    <saveDir>/home/brendonm/GRIP</saveDir>
+    <saveDir>/home/brendonm/Offseason-2018/src/main/kotlin/frc/team4069/robot/vision</saveDir>
     <packageName></packageName>
     <moduleName>grip</moduleName>
   </codeGenerationSettings>

@@ -19,6 +19,10 @@ object VisionSystem {
             synchronized(imgLock) {
                 tapeX = boundingRect.x + (boundingRect.width / 2)
                 tapeY = boundingRect.y + (boundingRect.height / 2)
+                println("X:")
+                println(tapeX)
+                println("Y:")
+                println(tapeX)
             }
         })
     }
