@@ -1,5 +1,6 @@
 package frc.team4069.robot
 
+import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.CommandGroup
@@ -53,8 +54,8 @@ class Robot : SaturnRobot() {
 //                addSequential(FollowPathCommand("back-switch-right.csv", false))
 //            }
 //        })
-        Scheduler.getInstance().add(DriveStraightCommand((-3).ft))
-        Pneumatics.enable()
+//        Scheduler.getInstance().add(DriveStraightCommand((-3).ft))
+//        Pneumatics.enable()
     }
 
     override fun teleopInit() {
@@ -63,7 +64,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun testInit() {
-        Pneumatics.enable()
+//        Pneumatics.enable()
     }
 
     override fun disabledInit() {

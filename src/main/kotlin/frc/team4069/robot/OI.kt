@@ -35,8 +35,6 @@ object OI {
 
     val controlJoystick = xboxController(1) {
         button(kA) {
-//            pressed(StartWinchCommand())
-//            released(StopWinchCommand())
             changeOn(ToggleOpenIntakeCommand())
         }
 
