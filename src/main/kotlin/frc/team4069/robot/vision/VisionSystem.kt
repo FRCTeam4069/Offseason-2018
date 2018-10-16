@@ -3,8 +3,8 @@ package frc.team4069.robot.vision
 import edu.wpi.first.wpilibj.CameraServer
 import edu.wpi.first.wpilibj.vision.VisionRunner
 import edu.wpi.first.wpilibj.vision.VisionThread
+import kotlinx.coroutines.experimental.launch
 import org.opencv.imgproc.Imgproc
-
 
 
 object VisionSystem {
@@ -25,5 +25,6 @@ object VisionSystem {
                 println(tapeX)
             }
         })
+        visionThread.start()
     }
 }
