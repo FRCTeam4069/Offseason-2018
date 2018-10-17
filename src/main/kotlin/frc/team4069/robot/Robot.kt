@@ -1,16 +1,12 @@
 package frc.team4069.robot
 
-import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.SPI
-import edu.wpi.first.wpilibj.command.CommandGroup
 import edu.wpi.first.wpilibj.command.Scheduler
-import edu.wpi.first.wpilibj.command.WaitCommand
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.commands.OperatorControlCommandGroup
 import frc.team4069.robot.commands.drive.DriveStraightCommand
-import frc.team4069.robot.commands.drive.FollowPathCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -28,7 +24,7 @@ class Robot : SaturnRobot() {
         +OI.driveJoystick
         +OI.controlJoystick
 
-        // Subsystem initialization
+//         Subsystem initialization
         DriveBaseSubsystem
         ArmSubsystem
         ElevatorSubsystem
@@ -54,8 +50,8 @@ class Robot : SaturnRobot() {
 //                addSequential(FollowPathCommand("back-switch-right.csv", false))
 //            }
 //        })
-//        Scheduler.getInstance().add(DriveStraightCommand((-3).ft))
-//        Pneumatics.enable()
+        Scheduler.getInstance().add(DriveStraightCommand((-3).ft))
+        Pneumatics.enable()
     }
 
     override fun teleopInit() {
@@ -64,7 +60,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun testInit() {
-//        Pneumatics.enable()
+        Pneumatics.enable()
     }
 
     override fun disabledInit() {
