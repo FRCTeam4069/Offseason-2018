@@ -80,8 +80,8 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean, reversed: Boolean =
         val twist = follower.update(currentPose)
         val (left, right) = twist.inverseKinematics(Constants.DRIVETRAIN_WIDTH_FT.ft)
 
-        val leftOut = lController.getPIDFOutput(left to (left - lastVelocity.first) / dt)
-        val rightOut = rController.getPIDFOutput(right to (right - lastVelocity.second) / dt)
+        val leftOut = lController.getPIDFOutput(left, (left - lastVelocity.first) / dt)
+        val rightOut = rController.getPIDFOutput(right, (right - lastVelocity.second) / dt)
 //
 //        println("PID out left: $leftOut. PID out right: $rightOut")
 

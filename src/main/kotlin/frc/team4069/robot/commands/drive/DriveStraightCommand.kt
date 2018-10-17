@@ -52,8 +52,8 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
     }
 
     override fun execute() {
-        val lOut = leftPid.getPIDFOutput(velocity to 0.0)
-        val rOut = rightPid.getPIDFOutput(velocity to 0.0)
+        val lOut = leftPid.getPIDFOutput(velocity, 0.0)
+        val rOut = rightPid.getPIDFOutput(velocity, 0.0)
 
         driveBase.set(ControlMode.PercentOutput,
                 lOut,
