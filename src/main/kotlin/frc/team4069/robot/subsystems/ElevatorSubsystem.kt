@@ -1,12 +1,9 @@
 package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
-import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.command.Subsystem
-import frc.team4069.robot.OI
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
-import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ElevatorSubsystem : Subsystem() {
@@ -17,13 +14,13 @@ object ElevatorSubsystem : Subsystem() {
     }
 
     private val talon =
-        SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = true, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
+        SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = false, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
 
     private const val MAX_POSITION_TICKS = -29000
 
     init {
         talon.apply {
-            invertSensorPhase = true
+            invertSensorPhase = false
 
             p = 0.7
             d = 0.01

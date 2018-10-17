@@ -5,14 +5,13 @@ import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
+import frc.team4069.robot.commands.AutoCommandGroup
 import frc.team4069.robot.commands.OperatorControlCommandGroup
-import frc.team4069.robot.commands.drive.DriveStraightCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.SaturnRobot
-import frc.team4069.saturn.lib.math.uom.distance.ft
 
 class Robot : SaturnRobot() {
     override fun robotInit() {
@@ -39,18 +38,8 @@ class Robot : SaturnRobot() {
     override fun autonomousInit() {
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))
-//        Scheduler.getInstance().add(AutoCommandGroup())
+        Scheduler.getInstance().add(AutoCommandGroup())
 
-//        Scheduler.getInstance().add(object : CommandGroup() {
-//            init {
-//                addSequential(FollowPathCommand("switch-right-new.csv", true))
-//                addSequential(WaitCommand(0.4))
-//                addSequential(DriveStraightCommand((-5).ft))
-//                addSequential(WaitCommand(1.0))
-//                addSequential(FollowPathCommand("back-switch-right.csv", false))
-//            }
-//        })
-        Scheduler.getInstance().add(DriveStraightCommand((-3).ft))
         Pneumatics.enable()
     }
 

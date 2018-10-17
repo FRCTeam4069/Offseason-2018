@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup
 import edu.wpi.first.wpilibj.command.WaitCommand
 import frc.team4069.robot.commands.drive.DriveStraightCommand
 import frc.team4069.robot.commands.drive.FollowPathCommand
-import frc.team4069.robot.commands.drive.TurnToAngleCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
 import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -13,26 +12,21 @@ import frc.team4069.saturn.lib.math.uom.velocity.fps
 
 class AutoCommandGroup : CommandGroup() {
     init {
-        addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 1.5))
-        addSequential(FollowPathCommand("switch-right.csv", true))
+        addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 0.6))
+        addSequential(FollowPathCommand("switch-right-new.csv", true))
         addSequential(ToggleOpenIntakeCommand())
         addSequential(WaitCommand(0.1))
         addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.MINIMUM, 0.7))
-        addSequential(DriveStraightCommand((-2.9).ft, baseVelocity = 4.fps))
-        addSequential(WaitCommand(0.1))
-        addSequential(TurnToAngleCommand(90.0))
+        addSequential(FollowPathCommand("switch-right-new.csv", reversed = true))
         addSequential(WaitCommand(0.1))
         addSequential(SetIntakeSpeedCommand(1.0))
-//        val command = ForwardIntakeCommand()
-//        addSequential(command)
-        addSequential(DriveStraightCommand({ 4.5.ft }, baseVelocity = 4.fps))
+        addSequential(DriveStraightCommand(10.ft, baseVelocity = 4.fps))
         addSequential(WaitCommand(0.15))
         addSequential(SetIntakeSpeedCommand(0.0))
         addSequential(ToggleOpenIntakeCommand())
-        addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 0.5))
-        addSequential(DriveStraightCommand({ (-4.1).ft }, baseVelocity = 4.fps))
-        addSequential(TurnToAngleCommand(-90.0))
-        addSequential(DriveStraightCommand({ 2.9.ft}, baseVelocity = 3.5.fps))
+        addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 0.4))
+        addSequential(DriveStraightCommand((-10).ft, baseVelocity = 4.fps))
+        addSequential(FollowPathCommand("switch-right-new.csv"))
         addSequential(ToggleOpenIntakeCommand())
     }
 }
