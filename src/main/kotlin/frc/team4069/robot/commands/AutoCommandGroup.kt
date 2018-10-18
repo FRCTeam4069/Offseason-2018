@@ -30,29 +30,3 @@ class AutoCommandGroup : CommandGroup() {
         addSequential(ToggleOpenIntakeCommand())
     }
 }
-
-//val switchRight = commandGroup {
-//    -DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 2.5)
-//    +FollowPathCommand("switch-right-new.csv", true)
-//    +SetIntakeSpeedCommand(-0.7)
-//    +WaitCommand(0.5)
-//    +SetIntakeSpeedCommand(0.0)
-//    -DelayRunElevatorCommand(ElevatorSubsystem.Position.MINIMUM, 0.7)
-//    +DriveStraightCommand((-2.7).ft)
-//    +WaitCommand(0.2)
-//    +TurnToAngleCommand(90.0)
-//    +WaitCommand(0.3)
-//    -SetIntakeSpeedCommand(1.0)
-//    val cmd = ForwardIntakeCommand()
-//    +cmd
-//    +WaitCommand(0.3)
-//    +SetIntakeSpeedCommand(0.0)
-//    -SetElevatorPositionCommand(ElevatorSubsystem.Position.SWITCH)
-//    +DriveStraightCommand({ (-cmd.finalDist).ft })
-//    +TurnToAngleCommand(-90.0)
-//    +DriveStraightCommand(1.5.ft)
-//    +SetIntakeSpeedCommand(-1.0)
-//    +WaitCommand(0.3)
-//    +SetIntakeSpeedCommand(0.0)
-//}
-//
