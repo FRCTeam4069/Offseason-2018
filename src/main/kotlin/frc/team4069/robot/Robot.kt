@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.commands.OperatorControlCommandGroup
+import frc.team4069.robot.commands.drive.FollowTapeCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -41,6 +42,7 @@ class Robot : SaturnRobot() {
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
 //        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))
 //        Scheduler.getInstance().add(AutoCommandGroup())
+        Scheduler.getInstance().add(FollowTapeCommand())
         Pneumatics.enable()
     }
 
