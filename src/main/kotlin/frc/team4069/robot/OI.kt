@@ -10,7 +10,6 @@ import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
-import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.hid.*
 
 object OI {
@@ -74,7 +73,7 @@ object OI {
 
     val elevatorAxis: Double
         get() {
-            val axis = controlJoystick.getY(GenericHID.Hand.kRight)
+            val axis = -controlJoystick.getY(GenericHID.Hand.kRight)
             return if (Math.abs(axis) in 0.0..0.2) {
                 0.0
             } else {

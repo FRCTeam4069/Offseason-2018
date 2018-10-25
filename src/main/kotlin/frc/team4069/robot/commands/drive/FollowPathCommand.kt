@@ -13,7 +13,7 @@ import jaci.pathfinder.Trajectory
 import java.io.File
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(path: Trajectory, zeroPose: Boolean, reversed: Boolean = false) : Command() {
+class FollowPathCommand(path: Trajectory, zeroPose: Boolean = false, reversed: Boolean = false) : Command() {
 //    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
     private val follower: RamsyeetPathFollower
 

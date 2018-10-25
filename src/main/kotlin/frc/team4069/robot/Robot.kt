@@ -4,8 +4,12 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro
 import edu.wpi.first.wpilibj.SPI
 import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
-import frc.team4069.robot.commands.AutoCommandGroup
+import frc.team4069.robot.auto.AutoMode
+import frc.team4069.robot.auto.Trajectories
+import frc.team4069.robot.auto.modes.LeftScaleMode
+import frc.team4069.robot.auto.modes.SwitchAutoMode
 import frc.team4069.robot.commands.OperatorControlCommandGroup
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
@@ -14,14 +18,26 @@ import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.SaturnRobot
 
 class Robot : SaturnRobot() {
+    lateinit var autoChooser: SendableChooser<AutoMode>
+
     override fun robotInit() {
         LiveWindow.disableAllTelemetry()
         Localization
         NTConnection
         NetworkInterface
 
+        // Load in the trajectories from disk
+        Trajectories
+
         +OI.driveJoystick
         +OI.controlJoystick
+
+        autoChooser = SendableChooser<AutoMode>().apply {
+            addObject("Center", SwitchAutoMode())
+            addObject("Left", LeftScaleMode())
+        }
+
+        SmartDashboard.putData("Starting positions", autoChooser)
 
 //         Subsystem initialization
         DriveBaseSubsystem
@@ -29,18 +45,12 @@ class Robot : SaturnRobot() {
         ElevatorSubsystem
         IntakeSubsystem
 
-        SmartDashboard.putNumber("POV angle", -1.0)
-        SmartDashboard.putBoolean("Over 30", false)
 
         DriveBaseSubsystem.reset()
     }
 
     override fun autonomousInit() {
-//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
-//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))
-        Scheduler.getInstance().add(AutoCommandGroup())
-
-        Pneumatics.enable()
+        Scheduler.getInstance().add(autoChooser.selected.build())
     }
 
     override fun teleopInit() {

@@ -2,25 +2,31 @@ package frc.team4069.robot.subsystems
 
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Subsystem
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
 object ElevatorSubsystem : Subsystem() {
-//    override var defaultCommand: Command? = OperatorControlElevatorCommand()
 
     override fun initDefaultCommand() {
         defaultCommand = OperatorControlElevatorCommand()
     }
 
     private val talon =
-        SaturnSRX(RobotMap.ELEVATOR_MAIN_SRX, reversed = false, slaveIds = *intArrayOf(RobotMap.ELEVATOR_SLAVE_SRX))
+        SaturnSRX(
+            RobotMap.ELEVATOR_MAIN_SRX
+//            filter = LowPassFilter(150)
+        )
+    private val follower = SaturnSRX(RobotMap.ELEVATOR_SLAVE_SRX)
 
-    private const val MAX_POSITION_TICKS = -29000
+    private const val MAX_POSITION_TICKS = 29000
 
     init {
+        follower.inverted = true
+        follower.follow(talon)
         talon.apply {
-            invertSensorPhase = false
+            invertSensorPhase = true
 
             p = 0.7
             d = 0.01
@@ -33,15 +39,18 @@ object ElevatorSubsystem : Subsystem() {
             peakCurrentDuration = 250
             continuousCurrentLimit = 32
             currentLimitEnabled = true
-
-            reverseSoftLimitThreshold = MAX_POSITION_TICKS
-            reverseSoftLimitEnabled = true
+//            forwardSoftLimitThreshold = MAX_POSITION_TICKS
+//            forwardSoftLimitEnabled = true
         }
     }
 
     fun set(mode: ControlMode, value: Double) = talon.set(mode, value)
 
     fun set(pos: Position) = set(ControlMode.MotionMagic, pos.ticks.toDouble())
+
+    override fun periodic() {
+        SmartDashboard.putNumber("Elevator current draw", talon.outputCurrent)
+    }
 
     val position: Int
         get() = talon.getSelectedSensorPosition(0)
@@ -59,8 +68,8 @@ object ElevatorSubsystem : Subsystem() {
 
     enum class Position(val ticks: Int) {
         MINIMUM(0),
-        CARRY(-2500),
-        SWITCH(-8000),
-        SCALE(MAX_POSITION_TICKS + 100)
+        CARRY(2500),
+        SWITCH(8000),
+        SCALE(MAX_POSITION_TICKS - 100)
     }
 }
