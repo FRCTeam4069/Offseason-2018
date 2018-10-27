@@ -24,6 +24,7 @@ apply plugin: 'kotlin'
 repositories {
     mavenCentral()
 
+    maven { url "http://dl.bintray.com/kyonifer/maven" }
     maven { url "https://jitpack.io" }
 }
 

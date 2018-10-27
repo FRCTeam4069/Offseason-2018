@@ -6,10 +6,9 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
-import frc.team4069.saturn.lib.math.uom.distance.NativeUnits
-import frc.team4069.saturn.lib.math.uom.distance.preferences
-import frc.team4069.saturn.lib.math.uom.velocity.FeetPerSecond
+import frc.team4069.saturn.lib.math.uom.distance.ctu
 import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
+import frc.team4069.saturn.lib.math.uom.velocity.fps
 import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
@@ -23,16 +22,16 @@ object DriveBaseSubsystem : Subsystem() {
 
 
     val leftPosition: DistanceUnit
-        get() = NativeUnits(leftEncoder.get(), preferences)
+        get() = leftEncoder.get().ctu
 
     val rightPosition: DistanceUnit
-        get() = NativeUnits(leftEncoder.get(), preferences)
+        get() = rightEncoder.get().ctu
 
     val leftVelocity: VelocityUnit
-        get() = FeetPerSecond(leftEncoder.rate, preferences)
+        get() = leftEncoder.rate.fps
 
     val rightVelocity: VelocityUnit
-        get() = FeetPerSecond(rightEncoder.rate, preferences)
+        get() = rightEncoder.rate.fps
 
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha

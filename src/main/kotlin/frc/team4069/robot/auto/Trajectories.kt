@@ -1,41 +1,63 @@
 package frc.team4069.robot.auto
 
-import jaci.pathfinder.Pathfinder
-import openrio.powerup.MatchData
-import java.io.File
+import frc.team4069.saturn.lib.math.geometry.Pose2d
+import frc.team4069.saturn.lib.math.geometry.Pose2dWithCurvature
+import frc.team4069.saturn.lib.math.geometry.deg
+import frc.team4069.saturn.lib.math.trajectory.DefaultTrajectoryGenerator
+import frc.team4069.saturn.lib.math.trajectory.TimedTrajectory
+import frc.team4069.saturn.lib.math.trajectory.constraint.Constraint
+import frc.team4069.saturn.lib.math.trajectory.constraint.NyoomyCirclyConstraint
+import frc.team4069.saturn.lib.math.uom.distance.ft
+import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
+import frc.team4069.saturn.lib.math.uom.velocity.fps
 
 object Trajectories {
-    private val paths = File("/home/lvuser/paths").listFiles { file -> file.extension == "csv" }
-        .associate {
-            val parts = it.nameWithoutExtension.split("-").map(String::toLowerCase)
 
-            val gamePiece = when(parts[0]) {
-                "switch" -> MatchData.GameFeature.SWITCH_NEAR
-                "scale" -> MatchData.GameFeature.SCALE
-                else -> throw IllegalArgumentException("Unknown game piece ${parts[0]}")
-            }
+    internal val trajectories = mutableListOf<Container>()
 
-            val side = when(parts[1]) {
-                "left" -> MatchData.OwnedSide.LEFT
-                "right" -> MatchData.OwnedSide.RIGHT
-                else -> throw IllegalArgumentException("Unknown side ${parts[1]}")
-            }
+    private val maxVelocity = 8.fps
+    private const val maxAcceleration = 5.0
+    private val maxCentripetalAcceleration = 4.0
 
-            val far = when(parts.getOrNull(2)) {
-                "far" -> true
-                else -> false
-            }
+    private val constraints = arrayListOf<Constraint<Pose2dWithCurvature>>(
+        NyoomyCirclyConstraint(maxCentripetalAcceleration)
+    )
+
+    val switchRight = waypoints {
+        +Pose2d(0.ft, 13.ft, 0.deg)
+        +Pose2d(4.ft, 12.ft, (-45).deg)
+        +Pose2d(11.ft, 8.ft, 0.deg)
+    }.generateTrajectory("switch-right", false)
 
 
-            (gamePiece to side and far) to Pathfinder.readFromCSV(it)
+    private class Waypoints {
+        val points = mutableListOf<Pose2d>()
+
+        fun generateTrajectory(
+            name: String,
+            reversed: Boolean,
+            maxVelocity: VelocityUnit = Trajectories.maxVelocity,
+            maxAcceleration: Double = Trajectories.maxAcceleration,
+            constraints: ArrayList<Constraint<Pose2dWithCurvature>> = Trajectories.constraints
+        ): TimedTrajectory<Pose2dWithCurvature> {
+
+            return DefaultTrajectoryGenerator.generateTrajectory(
+                reversed = reversed,
+                waypoints = points,
+                constraints = constraints,
+                startVelocity = 0.fps,
+                endVelocity = 0.fps,
+                maxVelocity = maxVelocity,
+                maxAcceleration = maxAcceleration
+            )
         }
 
-    init {
-        println("TRAJS: $paths")
+        operator fun Pose2d.unaryPlus() {
+            points.add(this)
+        }
     }
 
-    operator fun get(feature: MatchData.GameFeature, side: MatchData.OwnedSide, far: Boolean) = paths[feature to side and far]
-    operator fun get(feature: MatchData.GameFeature, side: MatchData.OwnedSide) = get(feature, side, false)
+    private inline fun waypoints(block: Waypoints.() -> Unit): Waypoints = Waypoints().apply(block)
 
-    infix fun <A, B, C> Pair<A, B>.and(third: C) = Triple(first, second, third)
+    data class Container(val name: String, val trajectory: TimedTrajectory<Pose2dWithCurvature>)
 }
