@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.auto.AutoMode
 import frc.team4069.robot.auto.Trajectories
 import frc.team4069.robot.auto.modes.LeftScaleMode
+import frc.team4069.robot.auto.modes.RightScaleMode
 import frc.team4069.robot.auto.modes.SwitchAutoMode
 import frc.team4069.robot.commands.OperatorControlCommandGroup
 import frc.team4069.robot.subsystems.ArmSubsystem
@@ -35,6 +36,7 @@ class Robot : SaturnRobot() {
         autoChooser = SendableChooser<AutoMode>().apply {
             addObject("Center", SwitchAutoMode())
             addObject("Left", LeftScaleMode())
+            addObject("Right", RightScaleMode())
         }
 
         SmartDashboard.putData("Starting positions", autoChooser)
@@ -55,11 +57,6 @@ class Robot : SaturnRobot() {
 
     override fun teleopInit() {
         Scheduler.getInstance().add(OperatorControlCommandGroup())
-        Pneumatics.enable()
-    }
-
-    override fun testInit() {
-        Pneumatics.enable()
     }
 
     override fun disabledInit() {

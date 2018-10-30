@@ -26,7 +26,7 @@ object DriveBaseSubsystem : Subsystem() {
         get() = NativeUnits(leftEncoder.get(), preferences)
 
     val rightPosition: DistanceUnit
-        get() = NativeUnits(leftEncoder.get(), preferences)
+        get() = NativeUnits(rightEncoder.get(), preferences)
 
     val leftVelocity: VelocityUnit
         get() = FeetPerSecond(leftEncoder.rate, preferences)
