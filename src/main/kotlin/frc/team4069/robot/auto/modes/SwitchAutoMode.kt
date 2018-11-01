@@ -31,8 +31,16 @@ class SwitchAutoMode : AutoMode() {
                 addSequential(ToggleOpenIntakeCommand())
                 addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 1.5))
                 addSequential(FollowPathCommand("$dirName/second.csv", reversed = true))
+                addParallel(object : CommandGroup() {
+                    init {
+                        addSequential(WaitCommand(1.3))
+                        addSequential(SetIntakeSpeedCommand(-1.0))
+                        addSequential(WaitCommand(0.2))
+                        addSequential(ToggleOpenIntakeCommand())
+                        addSequential(SetIntakeSpeedCommand(0.0))
+                    }
+                })
                 addSequential(FollowPathCommand("$dirName/retreat.csv"))
-                addSequential(ToggleOpenIntakeCommand())
 //                addSequential(WaitCommand(0.1))
 //                addSequential(SetIntakeSpeedCommand(1.0))
 //                addSequential(DriveStraightCommand(6.5.ft, baseVelocity = 6.fps))

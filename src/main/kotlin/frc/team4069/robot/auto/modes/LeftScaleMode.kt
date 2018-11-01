@@ -8,9 +8,9 @@ class LeftScaleMode : AutoMode() {
     override fun build(): CommandGroup {
         val side = MatchData.getOwnedSide(MatchData.GameFeature.SCALE)
         return if(side == MatchData.OwnedSide.RIGHT) {
-            FarLeftScaleMode(side).build()
+            FarLeftScaleMode().build()
         }else {
-            CloseLeftScaleMode(side).build()
+            CloseLeftScaleMode().build()
         }
     }
 }
