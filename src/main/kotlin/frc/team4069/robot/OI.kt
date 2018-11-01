@@ -5,6 +5,7 @@ import frc.team4069.robot.commands.arm.DeployArmCommand
 import frc.team4069.robot.commands.arm.DownArmCommand
 import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
+import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
 import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
@@ -29,6 +30,14 @@ object OI {
 
         button(kB) {
             changeOn(RetractArmCommand())
+        }
+
+        button(kBumperLeft) {
+            change(DriveCommand(DriveCommand.Direction.BACKWARDS))
+        }
+
+        button(kBumperRight) {
+            change(DriveCommand(DriveCommand.Direction.FORWARDS))
         }
     }
 
