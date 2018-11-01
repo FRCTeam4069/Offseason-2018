@@ -3,6 +3,7 @@ package frc.team4069.robot.commands.drive
 import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.Constants
+import frc.team4069.robot.Localization
 import frc.team4069.saturn.lib.math.VelocityPIDFController
 import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
 import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
@@ -49,6 +50,9 @@ class DriveStraightCommand(val relativeDistance: () -> DistanceUnit, val baseVel
 
     override fun end() {
         driveBase.stop()
+        val pose = Localization.position
+
+        println("Drive straight ending pose is $pose")
     }
 
     override fun execute() {
