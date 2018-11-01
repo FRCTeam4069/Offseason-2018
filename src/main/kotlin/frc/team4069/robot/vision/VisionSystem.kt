@@ -11,8 +11,8 @@ object VisionSystem {
     var tapeX = 0
     var tapeY = 0
     private val imgLock = Object()
-    val width = 640
-    val height = 480
+    val width = 1280
+    val height = 720
     fun startVisionThread() {
         val camera = CameraServer.getInstance().startAutomaticCapture()
         camera.setResolution(width, height)
