@@ -7,7 +7,6 @@ import frc.team4069.robot.auto.Trajectories
 import frc.team4069.robot.commands.DelayRunElevatorCommand
 import frc.team4069.robot.commands.drive.FollowPathCommand
 import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import openrio.powerup.MatchData
 
@@ -20,7 +19,7 @@ class SwitchAutoMode : AutoMode() {
             init {
                 addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 0.3))
                 addSequential(FollowPathCommand(path, zeroPose = true))
-                addSequential(ToggleOpenIntakeCommand())
+                addSequential(SetIntakeSpeedCommand(-0.7))
                 addSequential(WaitCommand(0.1))
                 addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.MINIMUM, 0.7))
 //                addSequential(FollowPathCommand(path, reversed = true))
@@ -28,15 +27,13 @@ class SwitchAutoMode : AutoMode() {
                 addSequential(SetIntakeSpeedCommand(1.0))
                 addSequential(FollowPathCommand("$dirName/second.csv"))
                 addSequential(SetIntakeSpeedCommand(0.0))
-                addSequential(ToggleOpenIntakeCommand())
                 addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SWITCH, 1.5))
                 addSequential(FollowPathCommand("$dirName/second.csv", reversed = true))
                 addParallel(object : CommandGroup() {
                     init {
                         addSequential(WaitCommand(1.3))
                         addSequential(SetIntakeSpeedCommand(-1.0))
-                        addSequential(WaitCommand(0.2))
-                        addSequential(ToggleOpenIntakeCommand())
+                        addSequential(WaitCommand(0.5))
                         addSequential(SetIntakeSpeedCommand(0.0))
                     }
                 })

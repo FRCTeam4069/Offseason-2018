@@ -3,7 +3,6 @@ package frc.team4069.robot.auto.modes
 import edu.wpi.first.wpilibj.command.CommandGroup
 import edu.wpi.first.wpilibj.command.WaitCommand
 import frc.team4069.robot.auto.AutoMode
-import frc.team4069.robot.auto.Trajectories
 import frc.team4069.robot.commands.DelayRunElevatorCommand
 import frc.team4069.robot.commands.drive.DriveStraightCommand
 import frc.team4069.robot.commands.drive.FollowPathCommand
@@ -13,7 +12,6 @@ import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
 import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
 import frc.team4069.saturn.lib.math.uom.distance.ft
-import openrio.powerup.MatchData
 
 class CloseRightScaleMode : AutoMode() {
     override fun build(): CommandGroup {
@@ -22,11 +20,11 @@ class CloseRightScaleMode : AutoMode() {
                 addParallel(DelayRunElevatorCommand(ElevatorSubsystem.Position.SCALE, 1.75))
                 addSequential(
                     FollowPathCommand(
-                        Trajectories[MatchData.GameFeature.SCALE, MatchData.OwnedSide.RIGHT]!!,
+                        "scale-right.csv",
                         zeroPose = true
                     )
                 )
-                addSequential(ToggleOpenIntakeCommand())
+                addSequential(SetIntakeSpeedCommand(-0.6))
                 addSequential(WaitCommand(0.2))
                 addSequential(DriveStraightCommand((-1).ft))
                 addSequential(WaitCommand(0.1))
@@ -50,8 +48,7 @@ class CloseRightScaleMode : AutoMode() {
                     init {
                         addSequential(WaitCommand(1.8))
                         addSequential(SetIntakeSpeedCommand(-1.0))
-                        addSequential(WaitCommand(0.1))
-                        addSequential(ToggleOpenIntakeCommand())
+                        addSequential(WaitCommand(0.3))
                         addSequential(SetIntakeSpeedCommand(0.0))
                     }
                 })

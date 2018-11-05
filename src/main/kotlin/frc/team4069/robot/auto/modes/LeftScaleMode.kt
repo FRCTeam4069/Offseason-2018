@@ -1,16 +1,18 @@
 package frc.team4069.robot.auto.modes
 
 import edu.wpi.first.wpilibj.command.CommandGroup
+import edu.wpi.first.wpilibj.command.WaitCommand
 import frc.team4069.robot.auto.AutoMode
-import openrio.powerup.MatchData
+import frc.team4069.robot.commands.drive.DriveStraightCommand
+import frc.team4069.saturn.lib.math.uom.distance.ft
 
 class LeftScaleMode : AutoMode() {
     override fun build(): CommandGroup {
-        val side = MatchData.getOwnedSide(MatchData.GameFeature.SCALE)
-        return if(side == MatchData.OwnedSide.RIGHT) {
-            FarLeftScaleMode().build()
-        }else {
-            CloseLeftScaleMode().build()
+        return object : CommandGroup() {
+            init {
+                addSequential(WaitCommand(7.0))
+                addSequential(DriveStraightCommand(5.ft))
+            }
         }
     }
 }

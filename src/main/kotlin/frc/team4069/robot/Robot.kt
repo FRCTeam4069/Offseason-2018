@@ -40,6 +40,7 @@ class Robot : SaturnRobot() {
         }
 
         SmartDashboard.putData("Starting positions", autoChooser)
+        SmartDashboard.putBoolean("Voltage Nominal", true)
 
 //         Subsystem initialization
         DriveBaseSubsystem
@@ -52,7 +53,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun autonomousInit() {
-        Scheduler.getInstance().add(autoChooser.selected.build())
+        Scheduler.getInstance().add(autoChooser.selected?.build() ?: return)
     }
 
     override fun teleopInit() {
@@ -61,16 +62,14 @@ class Robot : SaturnRobot() {
 
     override fun disabledInit() {
         IntakeSubsystem.disableSolenoid()
-//        NetworkInterface.stopTracking()
+        NetworkInterface.stopTracking()
     }
 
     override fun notifyBrownout() {
-        Pneumatics.disable()
-
         DriveBaseSubsystem.reduceLimits()
         ElevatorSubsystem.reduceLimits()
 
-        SmartDashboard.putBoolean("Brownout Occurred", true)
+        SmartDashboard.putBoolean("Voltage Nominal", false)
     }
 
     companion object {

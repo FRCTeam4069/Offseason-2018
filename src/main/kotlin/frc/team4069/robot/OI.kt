@@ -7,7 +7,7 @@ import frc.team4069.robot.commands.arm.RetractArmCommand
 import frc.team4069.robot.commands.arm.StopArmCommand
 import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
-import frc.team4069.robot.commands.intake.ToggleOpenIntakeCommand
+import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
 import frc.team4069.robot.commands.winch.StartWinchCommand
 import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -42,8 +42,10 @@ object OI {
     }
 
     val controlJoystick = xboxController(1) {
-        button(kA) {
-            changeOn(ToggleOpenIntakeCommand())
+
+        button(kBumperLeft) {
+            changeOn(SetIntakeSpeedCommand(-0.5))
+            changeOff(SetIntakeSpeedCommand(0.0))
         }
 
         button(kX) {
@@ -65,7 +67,7 @@ object OI {
     val turningAxis: Double
         get() {
             val axis = driveJoystick.getX(GenericHID.Hand.kLeft)
-            return if (axis in 0.0..0.2) {
+            return if (axis in 0.0..0.25) {
                 0.0
             } else {
                 axis

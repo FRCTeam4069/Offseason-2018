@@ -11,7 +11,7 @@ class RightScaleMode : AutoMode() {
         return if(side == MatchData.OwnedSide.RIGHT) {
             CloseRightScaleMode().build()
         }else {
-            TODO()
+            FarRightScaleMode().build()
         }
     }
 
