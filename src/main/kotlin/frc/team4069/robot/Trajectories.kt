@@ -33,6 +33,13 @@ object Trajectories {
             CentripetalAccelerationConstraint(2.feet.acceleration)
         ))
 
+
+    val testCurvature = waypoints(
+        Pose2d(0.feet, 13.feet),
+        Pose2d(5.feet, 10.feet, (-90).degree),
+        Pose2d(12.feet, 6.feet)
+    ).generateTrajectory("Test Curvature", reversed = false)
+
     private fun waypoints(vararg waypoints: Pose2d) = listOf(*waypoints)
 
     private fun List<Pose2d>.generateTrajectory(

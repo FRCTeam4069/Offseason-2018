@@ -41,7 +41,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun autonomousInit() {
-        Scheduler.getInstance().add(FollowPathCommand(Trajectories.switch, zeroPose = true))
+        Scheduler.getInstance().add(FollowPathCommand(Trajectories.testCurvature, zeroPose = true))
     }
 
     override fun disabledInit() {
