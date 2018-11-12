@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
-import frc.team4069.saturn.lib.mathematics.units.derivedunits.Velocity
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.LinearVelocity
 import frc.team4069.saturn.lib.mathematics.units.derivedunits.velocity
 import frc.team4069.saturn.lib.mathematics.units.feet
 import frc.team4069.saturn.lib.mathematics.units.nativeunits.NativeUnit
@@ -28,10 +28,10 @@ object DriveBaseSubsystem : Subsystem() {
     val rightPosition: NativeUnit
         get() = rightEncoder.get().STU
 
-    val leftVelocity: Velocity
+    val leftVelocity: LinearVelocity
         get() = leftEncoder.rate.feet.velocity
 
-    val rightVelocity: Velocity
+    val rightVelocity: LinearVelocity
         get() = leftEncoder.rate.feet.velocity
 
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold

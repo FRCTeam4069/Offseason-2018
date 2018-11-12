@@ -7,8 +7,8 @@ import frc.team4069.saturn.lib.mathematics.twodim.trajectory.constraints.Centrip
 import frc.team4069.saturn.lib.mathematics.twodim.trajectory.constraints.TimingConstraint
 import frc.team4069.saturn.lib.mathematics.twodim.trajectory.types.TimedTrajectory
 import frc.team4069.saturn.lib.mathematics.units.degree
-import frc.team4069.saturn.lib.mathematics.units.derivedunits.Acceleration
-import frc.team4069.saturn.lib.mathematics.units.derivedunits.Velocity
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.LinearAcceleration
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.LinearVelocity
 import frc.team4069.saturn.lib.mathematics.units.derivedunits.acceleration
 import frc.team4069.saturn.lib.mathematics.units.derivedunits.velocity
 import frc.team4069.saturn.lib.mathematics.units.feet
@@ -38,8 +38,8 @@ object Trajectories {
     private fun List<Pose2d>.generateTrajectory(
         name: String,
         reversed: Boolean,
-        maxVelocity: Velocity = Trajectories.maxVelocity,
-        maxAcceleration: Acceleration = Trajectories.maxAcceleration,
+        maxVelocity: LinearVelocity = Trajectories.maxVelocity,
+        maxAcceleration: LinearAcceleration = Trajectories.maxAcceleration,
         constraints: List<TimingConstraint<Pose2dWithCurvature>> = Trajectories.constraints
     ): TimedTrajectory<Pose2dWithCurvature> {
         println("Generating $name")
