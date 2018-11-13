@@ -12,7 +12,7 @@ object Constants {
     const val DRIVETRAIN_WIDTH_FT = 5.5
     // Ramsete constants
     const val kZeta = 0.9
-    const val kB = 0.85
+    const val kB = 1.0
 
     val DT_MODEL = NativeUnitLengthModel(256.STU, 3.6875.inch)
 }

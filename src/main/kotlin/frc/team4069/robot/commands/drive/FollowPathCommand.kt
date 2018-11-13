@@ -18,9 +18,7 @@ class FollowPathCommand(
     path: TimedTrajectory<Pose2dWithCurvature>,
     zeroPose: Boolean = false
 ) : Command() {
-    //    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
     private val follower = RamseteController(path, Constants.kB, Constants.kZeta)
-
 
     private val lController = VelocityPIDFController(
         p = Constants.DRIVETRAIN_P,
@@ -59,7 +57,7 @@ class FollowPathCommand(
 
         val wheelState = inverseKinematics(state, Constants.DRIVETRAIN_WIDTH_FT.feet)
 
-        // Target acceleration values are 0.0 because this model has no kA feedforward
+        // Target acceleration values can be 0.0 because this model has no kA feedforward
         val leftOut = lController.getPIDFOutput(wheelState.left, 0.0)
         val rightOut = rController.getPIDFOutput(wheelState.right, 0.0)
 
@@ -83,22 +81,11 @@ class FollowPathCommand(
 
     private fun updateDashboard() {
         val seg = follower.referencePose
-//        val seg = follower.getCurrentSegment()
+
         pathX = seg.translation.x.feet
         pathY = seg.translation.y.feet
         pathHdg = seg.rotation.radian
     }
-
-
-//    private fun inverseKinematics(
-//        state: DifferentialDrive.ChassisState,
-//        wheelBase: Length
-//    ): DifferentialDrive.WheelState {
-//        val left = (2 * state.linear - wheelBase.feet * state.angular) / 2.0
-//        val right = (2 * state.linear + wheelBase.feet * state.angular) / 2.0
-//
-//        return DifferentialDrive.WheelState(left, right)
-//    }
 
     fun inverseKinematics(state: DifferentialDrive.ChassisState,
                           wheelBase: Length): DifferentialDrive.WheelState {

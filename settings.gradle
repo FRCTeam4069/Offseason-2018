@@ -1,2 +1,3 @@
 rootProject.name = "TestBot"
 include "SaturnShell"
+//include "SaturnShell:PathVisualizer"
