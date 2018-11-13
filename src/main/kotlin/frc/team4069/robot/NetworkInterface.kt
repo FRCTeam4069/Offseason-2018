@@ -22,9 +22,9 @@ object NetworkInterface {
     init {
         notifier = Notifier {
             val pose = Localization.position
-            robotX.setDouble(pose.x)
-            robotY.setDouble(pose.y)
-            robotHdg.setDouble(pose.theta)
+            robotX.setDouble(pose.translation.x.feet)
+            robotY.setDouble(pose.translation.y.feet)
+            robotHdg.setDouble(pose.rotation.radian)
 
             pathX.setDouble(FollowPathCommand.pathX)
             pathY.setDouble(FollowPathCommand.pathY)

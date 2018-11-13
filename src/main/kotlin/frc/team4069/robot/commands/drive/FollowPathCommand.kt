@@ -1,73 +1,49 @@
 package frc.team4069.robot.commands.drive
 
 import com.ctre.phoenix.motorcontrol.ControlMode
+import com.team254.lib.physics.DifferentialDrive
 import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.Constants
 import frc.team4069.robot.Localization
-import frc.team4069.saturn.lib.math.Pose2d
-import frc.team4069.saturn.lib.math.RamsyeetPathFollower
-import frc.team4069.saturn.lib.math.VelocityPIDFController
-import frc.team4069.saturn.lib.math.uom.distance.ft
-import jaci.pathfinder.Pathfinder
-import jaci.pathfinder.Trajectory
-import java.io.File
+import frc.team4069.saturn.lib.mathematics.VelocityPIDFController
+import frc.team4069.saturn.lib.mathematics.twodim.control.RamseteController
+import frc.team4069.saturn.lib.mathematics.twodim.geometry.Pose2dWithCurvature
+import frc.team4069.saturn.lib.mathematics.twodim.trajectory.types.TimedTrajectory
+import frc.team4069.saturn.lib.mathematics.units.Length
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.feetPerSecond
+import frc.team4069.saturn.lib.mathematics.units.feet
 import frc.team4069.robot.subsystems.DriveBaseSubsystem as driveBase
 
-class FollowPathCommand(path: Trajectory, zeroPose: Boolean = false, reversed: Boolean = false) : Command() {
-//    private val follower = RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
-    private val follower: RamsyeetPathFollower
-
-    private var lastVelocity = 0.0 to 0.0
-    val dt = path[0].dt
-
-    val sign = if(reversed) -1 else 1
+class FollowPathCommand(
+    path: TimedTrajectory<Pose2dWithCurvature>,
+    zeroPose: Boolean = false
+) : Command() {
+    private val follower = RamseteController(path, Constants.kB, Constants.kZeta)
 
     private val lController = VelocityPIDFController(
-            p = Constants.DRIVETRAIN_P,
-            d = Constants.DRIVETRAIN_D,
-            v = Constants.DRIVETRAIN_V,
-            s = Constants.DRIVETRAIN_S,
-            currentVelocity = { driveBase.leftVelocity.fps }
+        p = Constants.DRIVETRAIN_P,
+        d = Constants.DRIVETRAIN_D,
+        v = Constants.DRIVETRAIN_V,
+        s = Constants.DRIVETRAIN_S,
+        currentVelocity = { driveBase.leftVelocity.feetPerSecond }
     )
 
     private val rController = VelocityPIDFController(
-            p = Constants.DRIVETRAIN_P,
-            d = Constants.DRIVETRAIN_D,
-            v = Constants.DRIVETRAIN_V,
-            s = Constants.DRIVETRAIN_S,
-            currentVelocity = { driveBase.rightVelocity.fps }
+        p = Constants.DRIVETRAIN_P,
+        d = Constants.DRIVETRAIN_D,
+        v = Constants.DRIVETRAIN_V,
+        s = Constants.DRIVETRAIN_S,
+        currentVelocity = { driveBase.rightVelocity.feetPerSecond }
     )
 
     init {
         println("Ramsete starting")
         requires(driveBase)
-        val firstSegment = path[0]
+
         if (zeroPose) {
-            Localization.reset(Pose2d(firstSegment.x, firstSegment.y, 0.0))
+            Localization.reset(path.firstState.state.pose)
             println("Pos: ${Localization.position}")
         }
-
-        follower = if(reversed) {
-            val dist = path.segments.last().position
-            val newPath = Trajectory(path.segments.reversed()
-                    .map {
-                        Trajectory.Segment(
-                                it.dt,
-                                it.x,
-                                it.y,
-                                dist - it.position,
-                                -it.velocity,
-                                -it.acceleration,
-                                -it.jerk,
-                                it.heading
-                        )
-                    }.toTypedArray())
-            RamsyeetPathFollower(newPath, Constants.kZeta, Constants.kB)
-        }else {
-            RamsyeetPathFollower(path, Constants.kZeta, Constants.kB)
-        }
-
-        println("Path is ${path.length() * dt} seconds long")
     }
 
     override fun initialize() {
@@ -77,20 +53,21 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean = false, reversed: B
     override fun execute() {
         val currentPose = Localization.position
 
-        val twist = follower.update(currentPose)
-        val (left, right) = twist.inverseKinematics(Constants.DRIVETRAIN_WIDTH_FT.ft)
+        val state = follower.update(currentPose)
 
-        val leftOut = lController.getPIDFOutput(left, (left - lastVelocity.first) / dt)
-        val rightOut = rController.getPIDFOutput(right, (right - lastVelocity.second) / dt)
-//
-//        println("PID out left: $leftOut. PID out right: $rightOut")
+        val wheelState = inverseKinematics(state, Constants.DRIVETRAIN_WIDTH_FT.feet)
+
+        // Target acceleration values can be 0.0 because this model has no kA feedforward
+        val leftOut = lController.getPIDFOutput(wheelState.left, 0.0)
+        val rightOut = rController.getPIDFOutput(wheelState.right, 0.0)
 
         updateDashboard()
 
-        driveBase.set(ControlMode.PercentOutput,
-                leftOut,
-                rightOut)
-        lastVelocity = left to right
+        driveBase.set(
+            ControlMode.PercentOutput,
+            leftOut,
+            rightOut
+        )
     }
 
     override fun end() {
@@ -102,15 +79,20 @@ class FollowPathCommand(path: Trajectory, zeroPose: Boolean = false, reversed: B
         return follower.isFinished
     }
 
-    constructor(csvName: String, zeroPose: Boolean = false, reversed: Boolean = false) : this(Pathfinder.readFromCSV(File("/home/lvuser/paths/$csvName")), zeroPose, reversed)
-
     private fun updateDashboard() {
-        val seg = follower.getCurrentSegment()
-        if(seg != null) {
-            pathX = seg.x
-            pathY = seg.y
-            pathHdg = seg.heading
-        }
+        val seg = follower.referencePose
+
+        pathX = seg.translation.x.feet
+        pathY = seg.translation.y.feet
+        pathHdg = seg.rotation.radian
+    }
+
+    fun inverseKinematics(state: DifferentialDrive.ChassisState,
+                          wheelBase: Length): DifferentialDrive.WheelState {
+        val left = ((-wheelBase.feet * state.angular + 2 * state.linear) / 2)
+        val right = ((wheelBase.feet * state.angular + 2 * state.linear) / 2)
+
+        return DifferentialDrive.WheelState(left, right)
     }
 
     companion object {

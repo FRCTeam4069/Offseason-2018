@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = "1.2.71"
+    ext.kotlin_version = "1.3.0"
 
     repositories {
         mavenCentral()
@@ -25,6 +25,7 @@ repositories {
     mavenCentral()
 
     maven { url "https://jitpack.io" }
+    maven { url "http://dl.bintray.com/kyonifer/maven" }
 }
 
 dependencies {
@@ -33,6 +34,8 @@ dependencies {
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0"
 //    compile files("libs/saturnshell.jar")
     compile project(":SaturnShell")
+    
+    
 
     compile wpilib()
     compile ctre()

@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
-import frc.team4069.saturn.lib.math.uom.distance.DistanceUnit
-import frc.team4069.saturn.lib.math.uom.distance.NativeUnits
-import frc.team4069.saturn.lib.math.uom.distance.preferences
-import frc.team4069.saturn.lib.math.uom.velocity.FeetPerSecond
-import frc.team4069.saturn.lib.math.uom.velocity.VelocityUnit
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.LinearVelocity
+import frc.team4069.saturn.lib.mathematics.units.derivedunits.velocity
+import frc.team4069.saturn.lib.mathematics.units.feet
+import frc.team4069.saturn.lib.mathematics.units.nativeunits.NativeUnit
+import frc.team4069.saturn.lib.mathematics.units.nativeunits.STU
 import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
@@ -22,17 +22,17 @@ object DriveBaseSubsystem : Subsystem() {
     private val rightEncoder = SaturnEncoder(256, 8, 9, true)
 
 
-    val leftPosition: DistanceUnit
-        get() = NativeUnits(leftEncoder.get(), preferences)
+    val leftPosition: NativeUnit
+        get() = leftEncoder.get().STU
 
-    val rightPosition: DistanceUnit
-        get() = NativeUnits(rightEncoder.get(), preferences)
+    val rightPosition: NativeUnit
+        get() = rightEncoder.get().STU
 
-    val leftVelocity: VelocityUnit
-        get() = FeetPerSecond(leftEncoder.rate, preferences)
+    val leftVelocity: LinearVelocity
+        get() = leftEncoder.rate.feet.velocity
 
-    val rightVelocity: VelocityUnit
-        get() = FeetPerSecond(rightEncoder.rate, preferences)
+    val rightVelocity: LinearVelocity
+        get() = leftEncoder.rate.feet.velocity
 
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha
@@ -42,8 +42,6 @@ object DriveBaseSubsystem : Subsystem() {
     override fun initDefaultCommand() {
         defaultCommand = OperatorDriveCommand()
     }
-
-    private const val METRES_PER_ROTATION = 0.61
 
     private var stopAccumulator = 0.0
 
