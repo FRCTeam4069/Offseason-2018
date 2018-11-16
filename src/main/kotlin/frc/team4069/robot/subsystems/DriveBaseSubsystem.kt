@@ -32,7 +32,7 @@ object DriveBaseSubsystem : Subsystem() {
         get() = leftEncoder.rate.feet.velocity
 
     val rightVelocity: LinearVelocity
-        get() = leftEncoder.rate.feet.velocity
+        get() = rightEncoder.rate.feet.velocity
 
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha
