@@ -39,11 +39,8 @@ class Robot : SaturnRobot() {
     }
 
     override fun autonomousInit() {
-//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))//.start()
-//        Scheduler.getInstance().add(FollowPathCommand("switch-right.csv", true))
-//        Scheduler.getInstance().add(AutoCommandGroup())
-        Scheduler.getInstance().add(FollowTapeCommand())
-        Pneumatics.enable()
+//        Scheduler.getInstance().add(FollowTapeCommand())
+//        Pneumatics.enable()
     }
 
     override fun teleopInit() {
