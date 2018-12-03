@@ -10,7 +10,24 @@ import kotlin.math.sqrt
 object VisionSystem {
     var tapeX = 0
     var tapeY = 0
-    private val sideLengthToDistanceTable = listOf(Pair(186, 1))
+    private val sideLengthToDistanceTable = listOf(
+            Pair(40, 6.0),
+            Pair(48, 5.0),
+            Pair(60, 4.0),
+            Pair(69, 3.5),
+            Pair(78, 3.0),
+            Pair(88, 2.7),
+            Pair(97, 2.4),
+            Pair(105, 2.2),
+            Pair(113, 2.0),
+            Pair(125, 1.8),
+            Pair(141, 1.6),
+            Pair(164, 1.4),
+            Pair(178, 1.2),
+            Pair(197, 1.0),
+            Pair(223, 0.8),
+            Pair(268, 0.6)
+    )
     private val imgLock = Object()
     private var pastSideLengths = DoubleArray(4)
     val width = 1280
