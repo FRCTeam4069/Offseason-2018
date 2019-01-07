@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Scheduler
 import edu.wpi.first.wpilibj.livewindow.LiveWindow
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.commands.OperatorControlCommandGroup
-import frc.team4069.robot.commands.drive.FollowTapeCommand
+import frc.team4069.robot.commands.drive.CenterAndDistanceCommand
 import frc.team4069.robot.subsystems.ArmSubsystem
 import frc.team4069.robot.subsystems.DriveBaseSubsystem
 import frc.team4069.robot.subsystems.ElevatorSubsystem
@@ -39,7 +39,7 @@ class Robot : SaturnRobot() {
     }
 
     override fun autonomousInit() {
-//        Scheduler.getInstance().add(FollowTapeCommand())
+        Scheduler.getInstance().add(CenterAndDistanceCommand())
 //        Pneumatics.enable()
     }
 
