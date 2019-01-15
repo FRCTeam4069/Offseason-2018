@@ -5,20 +5,27 @@ import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.elevator.OperatorControlElevatorCommand
+import frc.team4069.saturn.lib.commands.SaturnSubsystem
+import frc.team4069.saturn.lib.mathematics.units.amp
+import frc.team4069.saturn.lib.mathematics.units.millisecond
+import frc.team4069.saturn.lib.mathematics.units.nativeunits.STUPer100ms
+import frc.team4069.saturn.lib.mathematics.units.nativeunits.STUPer100msPerSecond
+import frc.team4069.saturn.lib.mathematics.units.second
+import frc.team4069.saturn.lib.motor.NativeSaturnSRX
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
-object ElevatorSubsystem : Subsystem() {
+object ElevatorSubsystem : SaturnSubsystem() {
 
-    override fun initDefaultCommand() {
-        defaultCommand = OperatorControlElevatorCommand()
+    override fun teleopReset() {
+        OperatorControlElevatorCommand().start()
     }
 
     private val talon =
-        SaturnSRX(
+        NativeSaturnSRX(
             RobotMap.ELEVATOR_MAIN_SRX
 //            filter = LowPassFilter(150)
         )
-    private val follower = SaturnSRX(RobotMap.ELEVATOR_SLAVE_SRX)
+    private val follower = NativeSaturnSRX(RobotMap.ELEVATOR_SLAVE_SRX)
 
     private const val MAX_POSITION_TICKS = 29000
 
@@ -26,19 +33,19 @@ object ElevatorSubsystem : Subsystem() {
         follower.inverted = true
         follower.follow(talon)
         talon.apply {
-            invertSensorPhase = true
+            this.setSensorPhase(true)
 
-            p = 0.7
-            d = 0.01
-            f = 0.5
+            kP = 0.7
+            kD = 0.01
+            kF = 0.5
 
-            motionAcceleration = 2500
-            motionCruiseVelocity = 3000
+            motionAcceleration = 2500.STUPer100msPerSecond
+            motionCruiseVelocity = 3000.STUPer100ms
 
-            peakCurrentLimit = 35
-            peakCurrentDuration = 250
-            continuousCurrentLimit = 32
-            currentLimitEnabled = true
+            peakCurrentLimit = 35.amp
+            peakCurrentLimitDuration = 250.millisecond
+            continuousCurrentLimit = 32.amp
+            currentLimitingEnabled = true
 //            forwardSoftLimitThreshold = MAX_POSITION_TICKS
 //            forwardSoftLimitEnabled = true
         }
@@ -48,21 +55,17 @@ object ElevatorSubsystem : Subsystem() {
 
     fun set(pos: Position) = set(ControlMode.MotionMagic, pos.ticks.toDouble())
 
-    override fun periodic() {
-        SmartDashboard.putNumber("Elevator current draw", talon.outputCurrent)
-    }
-
     val position: Int
         get() = talon.getSelectedSensorPosition(0)
 
     fun reduceLimits() {
         talon.apply {
-            currentLimitEnabled = false
-            peakCurrentLimit = 0
-            peakCurrentDuration = 0
+            currentLimitingEnabled = false
+            peakCurrentLimit = 0.amp
+            peakCurrentLimitDuration = 0.second
 
-            continuousCurrentLimit = 26
-            currentLimitEnabled = true
+            continuousCurrentLimit = 26.amp
+            currentLimitingEnabled = true
         }
     }
 

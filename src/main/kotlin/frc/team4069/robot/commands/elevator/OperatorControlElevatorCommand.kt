@@ -4,20 +4,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode
 import edu.wpi.first.wpilibj.command.Command
 import frc.team4069.robot.OI
 import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.saturn.lib.commands.SaturnCommand
 
-class OperatorControlElevatorCommand : Command() {
+class OperatorControlElevatorCommand : SaturnCommand(ElevatorSubsystem) {
 
     private var set = true
 
-    init {
-        requires(ElevatorSubsystem)
-    }
-
-    override fun initialize() {
+    override suspend fun initialize() {
         println("Operator command init")
     }
 
-    override fun execute() {
+    override suspend fun execute() {
         val elevatorAxis = OI.elevatorAxis * 0.8
 
         if(elevatorAxis != 0.0) {
@@ -29,13 +26,5 @@ class OperatorControlElevatorCommand : Command() {
                 set = true
             }
         }
-    }
-
-    override fun end() {
-        println("operator command end")
-    }
-
-    override fun isFinished(): Boolean {
-        return false
     }
 }

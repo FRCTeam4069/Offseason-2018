@@ -1,16 +1,10 @@
 package frc.team4069.robot
 
 import edu.wpi.first.wpilibj.GenericHID
-import frc.team4069.robot.commands.arm.DeployArmCommand
-import frc.team4069.robot.commands.arm.DownArmCommand
-import frc.team4069.robot.commands.arm.RetractArmCommand
-import frc.team4069.robot.commands.arm.StopArmCommand
 import frc.team4069.robot.commands.drive.DriveCommand
 import frc.team4069.robot.commands.elevator.SetElevatorPositionCommand
-import frc.team4069.robot.commands.intake.SetIntakeSpeedCommand
-import frc.team4069.robot.commands.winch.StartWinchCommand
-import frc.team4069.robot.commands.winch.StopWinchCommand
 import frc.team4069.robot.subsystems.ElevatorSubsystem
+import frc.team4069.robot.subsystems.IntakeSubsystem
 import frc.team4069.saturn.lib.hid.*
 
 object OI {
@@ -19,19 +13,6 @@ object OI {
 //    val controlJoystick: Controller
 
     val driveJoystick = xboxController(0) {
-        button(kA) {
-            changeOn(DeployArmCommand())
-        }
-
-        button(kX) {
-            changeOn(DownArmCommand())
-            changeOff(StopArmCommand())
-        }
-
-        button(kB) {
-            changeOn(RetractArmCommand())
-        }
-
         button(kBumperLeft) {
             change(DriveCommand(DriveCommand.Direction.BACKWARDS))
         }
@@ -44,18 +25,12 @@ object OI {
     val controlJoystick = xboxController(1) {
 
         button(kBumperLeft) {
-            changeOn(SetIntakeSpeedCommand(-0.5))
-            changeOff(SetIntakeSpeedCommand(0.0))
-        }
-
-        button(kX) {
-            changeOn(StartWinchCommand())
-            changeOff(StopWinchCommand())
-        }
-
-        button(kB) {
-            changeOn(StartWinchCommand(reversed = true))
-            changeOff(StopWinchCommand())
+            changeOn {
+                IntakeSubsystem.set(-0.5)
+            }
+            changeOff {
+                IntakeSubsystem.set(0.0)
+            }
         }
 
         pov(POVSide.DOWN).changeOn(SetElevatorPositionCommand(ElevatorSubsystem.Position.MINIMUM, instant = true))

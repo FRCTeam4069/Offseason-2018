@@ -5,79 +5,65 @@ import edu.wpi.first.wpilibj.command.Subsystem
 import edu.wpi.first.wpilibj.drive.DifferentialDrive
 import frc.team4069.robot.RobotMap
 import frc.team4069.robot.commands.drive.OperatorDriveCommand
+import frc.team4069.saturn.lib.commands.SaturnSubsystem
+import frc.team4069.saturn.lib.mathematics.units.amp
 import frc.team4069.saturn.lib.mathematics.units.derivedunits.LinearVelocity
 import frc.team4069.saturn.lib.mathematics.units.derivedunits.velocity
 import frc.team4069.saturn.lib.mathematics.units.feet
 import frc.team4069.saturn.lib.mathematics.units.nativeunits.NativeUnit
 import frc.team4069.saturn.lib.mathematics.units.nativeunits.STU
+import frc.team4069.saturn.lib.mathematics.units.second
+import frc.team4069.saturn.lib.motor.NativeSaturnSRX
 import frc.team4069.saturn.lib.motor.SaturnEncoder
 import frc.team4069.saturn.lib.motor.SaturnSRX
 
-object DriveBaseSubsystem : Subsystem() {
-    private val leftDrive = SaturnSRX(RobotMap.DRIVEBASE_LEFT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_LEFT_SLAVES_SRX)
-    private val leftEncoder = SaturnEncoder(256, 0, 1)
+object DriveBaseSubsystem : SaturnSubsystem() {
+    private val leftMaster = NativeSaturnSRX(RobotMap.DRIVEBASE_LEFT_MAIN_SRX)
+    private val leftSlave1 = NativeSaturnSRX(RobotMap.DRIVEBASE_LEFT_SLAVES_SRX[0])
+    private val leftSlave2 = NativeSaturnSRX(RobotMap.DRIVEBASE_LEFT_SLAVES_SRX[1])
 
-    private val rightDrive =
-        SaturnSRX(RobotMap.DRIVEBASE_RIGHT_MAIN_SRX, slaveIds = *RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX)
-    private val rightEncoder = SaturnEncoder(256, 8, 9, true)
+    private val rightMaster = NativeSaturnSRX(RobotMap.DRIVEBASE_RIGHT_MAIN_SRX)
+    private val rightSlave1 = NativeSaturnSRX(RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX[0])
+    private val rightSlave2 = NativeSaturnSRX(RobotMap.DRIVEBASE_RIGHT_SLAVES_SRX[1])
 
-
-    val leftPosition: NativeUnit
-        get() = leftEncoder.get().STU
-
-    val rightPosition: NativeUnit
-        get() = rightEncoder.get().STU
-
-    val leftVelocity: LinearVelocity
-        get() = leftEncoder.rate.feet.velocity
-
-    val rightVelocity: LinearVelocity
-        get() = rightEncoder.rate.feet.velocity
 
     private const val stopThreshold = DifferentialDrive.kDefaultQuickStopThreshold
     private const val stopAlpha = DifferentialDrive.kDefaultQuickStopAlpha
 
-//    override var defaultCommand: Command? = OperatorDriveCommand()
-
-    override fun initDefaultCommand() {
-        defaultCommand = OperatorDriveCommand()
+    override fun teleopReset() {
+        OperatorDriveCommand().start()
     }
 
     private var stopAccumulator = 0.0
 
     init {
-        leftEncoder.distancePerPulse = 0.0075421
-        rightEncoder.distancePerPulse = 0.0075421
-
-        leftDrive.apply {
-            continuousCurrentLimit = 40
-            peakCurrentLimit = 0
-            peakCurrentDuration = 0
-            currentLimitEnabled = true
+        leftMaster.apply {
+            continuousCurrentLimit = 40.amp
+            peakCurrentLimit = 0.amp
+            peakCurrentLimitDuration = 0.second
+            currentLimitingEnabled = true
         }
 
-        rightDrive.apply {
-            continuousCurrentLimit = 40
-            peakCurrentLimit = 0
-            peakCurrentDuration = 0
-            currentLimitEnabled = true
+        rightMaster.apply {
+            continuousCurrentLimit = 40.amp
+            peakCurrentLimit = 0.amp
+            peakCurrentLimitDuration = 0.second
+            currentLimitingEnabled = true
         }
+        leftSlave1.follow(leftMaster)
+        leftSlave2.follow(leftMaster)
+
+        rightSlave1.follow(rightMaster)
+        rightSlave2.follow(rightMaster)
     }
 
     fun stop() {
-        leftDrive.stop()
-        rightDrive.stop()
+        leftMaster.stopMotor()
+        rightMaster.stopMotor()
     }
 
     fun reset() {
         stop()
-        leftEncoder.reset()
-        rightEncoder.reset()
-    }
-
-    fun reverse() {
-        leftEncoder.reversed = !leftEncoder.reversed
-        rightEncoder.reversed = !rightEncoder.reversed
     }
 
     /**
@@ -135,21 +121,21 @@ object DriveBaseSubsystem : Subsystem() {
     }
 
     fun set(mode: ControlMode, left: Double, right: Double) {
-        leftDrive.set(mode, left)
-        rightDrive.set(mode, right)
+        leftMaster.set(mode, left)
+        rightMaster.set(mode, right)
     }
 
     fun reduceLimits() {
-        leftDrive.apply {
-            currentLimitEnabled = false
-            continuousCurrentLimit = 30
-            currentLimitEnabled = true
+        leftMaster.apply {
+            currentLimitingEnabled = false
+            continuousCurrentLimit = 30.amp
+            currentLimitingEnabled = true
         }
 
-        rightDrive.apply {
-            currentLimitEnabled = false
-            continuousCurrentLimit = 30
-            currentLimitEnabled = true
+        rightMaster.apply {
+            currentLimitingEnabled = false
+            continuousCurrentLimit = 30.amp
+            currentLimitingEnabled = true
         }
     }
 }
